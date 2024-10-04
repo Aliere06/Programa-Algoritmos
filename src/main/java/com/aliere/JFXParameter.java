@@ -1,24 +1,29 @@
 package com.aliere;
 
+import org.kordamp.ikonli.Ikon;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;
+import org.kordamp.ikonli.javafx.FontIcon;
+
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class JFXParameter extends VBox {
 
+    public final Ikon DEFAULT_ICON = FontAwesomeRegular.CIRCLE;
+
     private boolean hasButton;
 
     @FXML Label label;
     @FXML TextField textField;
     @FXML Button button;
+    @FXML FontIcon buttonIcon;
     
     public JFXParameter() {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("Parameter.fxml"));
@@ -40,6 +45,7 @@ public class JFXParameter extends VBox {
     public JFXParameter(String text, EventHandler<ActionEvent> button_action) {
         this();
         setHasButton(true);
+        setButtonIcon(DEFAULT_ICON);
         setButtonAction(button_action);
     }
 
@@ -57,7 +63,14 @@ public class JFXParameter extends VBox {
     public void setButtonAction(EventHandler<ActionEvent> action) {
         button.setOnAction(action);
     }
+    public void setButtonIcon(Ikon buttonIcon) {
+        this.buttonIcon.setIconCode(buttonIcon);
+    }
+
     public String getInput() {
         return textField.getText();
+    }
+    public Boolean getHasButton() {
+        return hasButton;
     }
 }

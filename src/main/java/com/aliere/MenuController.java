@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -17,16 +18,18 @@ public class MenuController implements Initializable{
 
     @FXML
     private void algorithmBtnPress(ActionEvent event) {
-        Main.setScreen(Main.Screen.ALGORITHM);
+        //Main.setScreen(Main.Screen.ALGORITHM);
+        name(event);
     }
 
     public static void name(ActionEvent event) {
         Button b = (Button)event.getSource();
         System.out.println(b.getText());
         GridPane g = (GridPane)b.getParent();
-        JFXParameter p = new JFXParameter();
+        EventHandler<ActionEvent> handy = e -> {System.out.println("click!");};
+        JFXParameter p = new JFXParameter("Param 1", handy);
         p.setText("testing");
-        //g.add(p, 1, 2);
+        g.add(p, 1, 2);
     }
     
 }
