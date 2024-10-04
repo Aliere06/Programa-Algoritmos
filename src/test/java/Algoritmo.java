@@ -3,29 +3,30 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Algoritmo {
     private String nombre;
     private String codigo;
-    private List<Parametro<?>> parametros; //Tiene que ser ArrayList
-    private List<NumAleatorio> numeros;
-    //String[] columnas
+    private ArrayList<Parametro<?>> parametros;
+    private ArrayList<NumAleatorio> numeros;
+    private String[] columnas = {"Iteración", "Xi", "Xi^2", "mod M", "Xi / M-1"};
 
-    public Algoritmo(String nombre, String codigo, Parametro<?>... parametros) {// parametros son un arreglo
+    public Algoritmo(String nombre, String codigo, Parametro<?>... parametros) {
         this.nombre = nombre;
         this.codigo = codigo;
-        this.parametros = parametros;
+        this.parametros = new ArrayList<>();
+        for (Parametro<?> parametro : parametros) {
+            this.parametros.add(parametro);
+        }
         this.numeros = new ArrayList<>();
     }
 
-    public BigInteger generarNumAleatorio(BigInteger seed) { //tiene que regresar un numero aleatorio y es abstracto
-
-        //En base a la semilla, calcular el siguiente num A. regresarlo como NumeroAleatorio junto con el mapa
-        //de los componentes que corresponden a cada columna del arreglo, y agregarlo a la lista de num A. del algoritmo
+    public BigInteger generarNumAleatorio(BigInteger seed) {
         BigInteger p = (BigInteger) parametros.get(0).validar();
         BigInteger q = (BigInteger) parametros.get(1).validar();
-        BigInteger m = (BigInteger) parametros.get(3).validar();
+        BigInteger m = (BigInteger) parametros.get(2).validar();
 
         if (!esPrimo(p) || !esPrimo(q)) {
             throw new IllegalArgumentException("p y q deben ser primos.");
@@ -34,13 +35,53 @@ public class Algoritmo {
             throw new IllegalArgumentException("p y q deben cumplir p % 4 == 3 y q % 4 == 3.");
         }
 
-        BigInteger x = seed.multiply(seed).mod(m);
-        if (x.compareTo(BigInteger.ZERO) < 0) {
-            x = x.abs();
+        public static boolean seeds(BigInteger seed, BigInteger m) {
+            return seed.compareTo(m) < 0 && Math.sqrt(seed.doubleValue()) % 1 == 0;
         }
 
-        numeros.add(new NumAleatorio(x));
-        return x;
+        BigInteger xiSquared = seed.pow(2);
+        BigInteger modM = xiSquared.mod(m);
+
+        if (modM.compareTo(BigInteger.ZERO) < 0) {
+            modM = modM.abs();
+        }
+
+        double normalized = modM.doubleValue() / (m.doubleValue() - 1);
+
+        Map<String, Object> mapaValores = new HashMap<>();
+        mapaValores.put(columnas[1], seed);
+        mapaValores.put(columnas[2], xiSquared);
+        mapaValores.put(columnas[3], modM);
+        mapaValores.put(columnas[4], normalized);
+
+        numeros.add(new NumAleatorio(modM, mapaValores));
+
+        return modM;
+    }
+
+    boolean esPrimo(BigInteger numero) {
+        return numero.isProbablePrime(10);
+    }
+
+    public void imprimirTabla(BigInteger seed) {
+        System.out.println("------------------------------------------------------");
+        System.out.printf("| %-10s | %-15s | %-15s | %-15s | %-15s |\n", columnas[0], columnas[1], columnas[2], columnas[3], columnas[4]);
+        System.out.println("------------------------------------------------------");
+
+        BigInteger xi = seed;
+
+        for (int i = 1; i <= 10; i++) {
+            xi = generarNumAleatorio(xi);
+
+            NumAleatorio num = numeros.get(i - 1);
+            Map<String, Object> valores = num.getValores();
+
+            System.out.printf("| %-10d | %-15s | %-15s | %-15s | %-15.4f |\n",
+                    i, valores.get(columnas[1]).toString(), valores.get(columnas[2]).toString(),
+                    valores.get(columnas[3]).toString(), (double) valores.get(columnas[4]));
+        }
+
+        System.out.println("------------------------------------------------------");
     }
 
     public File exportarNumeros() {
@@ -53,29 +94,5 @@ public class Algoritmo {
             e.printStackTrace();
         }
         return archivo;
-    }
-
-    public void imprimirTabla(BigInteger initialSeed) {
-        BigInteger p = (BigInteger) parametros.get(0).getValor();
-        BigInteger q = (BigInteger) parametros.get(1).getValor();
-        BigInteger m = (BigInteger) parametros.get(3).getValor();
-
-        System.out.println("\nTabla de Resultados");
-        System.out.println("--------------------------------------------------------------------------------");
-        System.out.printf("%-10s %-10s %-10s %-20s %-20s %-20s %-20s %-20s%n",
-                "Iteracion", "p", "q", "m", "Semilla", "Num Aleatorio", "Valor Normalizado", "Observaciones");
-
-        BigInteger currentSeed = initialSeed;
-        for (int i = 0; i < numeros.size(); i++) {
-            NumAleatorio num = numeros.get(i);
-            double valorNormalizado = num.getValorNormalizado(m);
-            System.out.printf("%-10d %-10d %-10d %-20d %-20d %-20d %-20f %-20s%n",
-                    (i + 1), p, q, m, currentSeed, num.getValor(), valorNormalizado, "");
-            currentSeed = num.getValor();
-        }
-    }
-
-    public static boolean esPrimo(BigInteger n) {
-        return n.isProbablePrime(10);
     }
 }
