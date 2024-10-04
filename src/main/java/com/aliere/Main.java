@@ -15,29 +15,30 @@ public class Main extends Application{
         ALGORITHM("Pantalla Algoritmo.fxml", true);
 
         private URL resource;
-        private Parent root;
+        private Parent screen;
 
         Screen(String filename, boolean isPreCached){
             resource = getClass().getClassLoader().getResource(filename);
             if (isPreCached) {
-                setRoot();
+                setScene();
             }
         }
 
-        private void setRoot() {
+        private void setScene() {
             try {
-                root = FXMLLoader.load(resource);
+                System.out.println("\nLoading " + resource);
+                screen = FXMLLoader.load(resource);
             } catch (Exception e) {
                 System.out.println("Failed to load fxml for enum: " + this.name());
                 e.printStackTrace();
             }
         }
 
-        public Parent getRoot() {
-            if (root == null) {
-                setRoot();
+        public Parent getScreen() {
+            if (screen == null) {
+                setScene();
             }
-            return root;
+            return screen;
         }
 
     }
@@ -46,13 +47,14 @@ public class Main extends Application{
 
     @Override
     public void start(Stage stage) throws Exception {
-
-        scene = new Scene(Screen.MENU.getRoot());
-        ScreenSwitcher.setScene(scene);
-
+        scene = new Scene(Screen.MENU.getScreen(),600,400);
         stage.setTitle("Generadores Aleatorios");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public static void setScreen(Screen newScreen) {
+        scene.setRoot(newScreen.getScreen());
     }
 
     public static void main(String[] args) {

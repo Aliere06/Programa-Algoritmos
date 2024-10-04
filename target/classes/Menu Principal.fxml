@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: linear-gradient(to top, lightgray, white 10%);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aliere.MenuController">
+<VBox style="-fx-background-color: linear-gradient(to top, lightgray, white 10%);" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aliere.MenuController">
    <children>
       <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #001d44;" text="Generadores de Num. Aleatorios" textFill="WHITE" underline="true" VBox.vgrow="NEVER">
          <font>
@@ -42,32 +42,32 @@
                   <Font name="Consolas" size="18.0" />
                </font>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Algoritmo 1" textFill="#001d44" GridPane.columnIndex="1" GridPane.vgrow="ALWAYS">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#algorithmBtnPress" text="Algoritmo 2" textFill="#001d44" GridPane.columnIndex="1" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="Consolas" size="18.0" />
                </font>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Algoritmo 1" textFill="#001d44" GridPane.columnIndex="2" GridPane.vgrow="ALWAYS">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#algorithmBtnPress" text="Algoritmo 3" textFill="#001d44" GridPane.columnIndex="2" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="Consolas" size="18.0" />
                </font>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Algoritmo 1" textFill="#001d44" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#algorithmBtnPress" text="Algoritmo 4" textFill="#001d44" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="Consolas" size="18.0" />
                </font>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Algoritmo 1" textFill="#001d44" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#algorithmBtnPress" text="Algoritmo 5" textFill="#001d44" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="Consolas" size="18.0" />
                </font>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Algoritmo 1" textFill="#001d44" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#algorithmBtnPress" text="Algoritmo 6" textFill="#001d44" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="Consolas" size="18.0" />
                </font>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Algoritmo 1" textFill="#001d44" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#algorithmBtnPress" text="Algoritmo 7" textFill="#001d44" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="Consolas" size="18.0" />
                </font>

@@ -13,6 +13,6 @@ public class ScreenSwitcher {
     }
 
     public static void switchScreen(Screen newScreen) {
-        scene.setRoot(newScreen.getRoot());
+        scene.setRoot(newScreen.getScreen());
     }
 }

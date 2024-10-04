@@ -14,6 +14,6 @@ public class AlgorithmController implements Initializable{
     
     @FXML
     public void backBtnPress() {
-        ScreenSwitcher.switchScreen(Main.Screen.MENU);
+        Main.setScreen(Main.Screen.MENU);
     }
 }

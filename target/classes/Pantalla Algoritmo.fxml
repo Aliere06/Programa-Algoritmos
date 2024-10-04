@@ -13,11 +13,11 @@
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: linear-gradient(to top, lightgray, white 10%);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aliere.AlgorithmController">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: linear-gradient(to top, lightgray, white 10%);" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aliere.AlgorithmController">
    <children>
       <HBox VBox.vgrow="NEVER">
          <children>
-            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #001d44;" text="Algoritmo X" textFill="WHITE" underline="true" HBox.hgrow="ALWAYS">
+            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #001d44;" text="Algoritmo XX" textFill="WHITE" underline="true" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="Consolas Bold" size="24.0" />
                </font>
