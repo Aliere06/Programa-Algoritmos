@@ -1,19 +1,24 @@
-import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.Map;
 
 public class NumAleatorio {
-    private BigInteger valor; //double
-    //hashmap<String,String> componentes
+    private double valor; // Cambiado a double
+    private Map<String, Object> componentes; // Cambiado a Map
 
-    public NumAleatorio(BigInteger valor, HashMap componentes) {
+    public NumAleatorio(double valor, Map<String, Object> componentes) {
         this.valor = valor;
+        this.componentes = componentes;
     }
 
-    public BigInteger getValor() {
+    public double getValor() {
         return valor;
     }
 
-    public double getValorNormalizado(BigInteger m) {
-        return valor.doubleValue() / m.doubleValue();
+    public double getValorNormalizado(Long m) {
+        return valor / m;
+    }
+
+    public Map<String, Object> getValores() {
+        return componentes;
     }
 }
