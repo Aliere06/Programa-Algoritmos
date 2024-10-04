@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -14,7 +12,6 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-
 
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: linear-gradient(to top, lightgray, white 10%);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aliere.AlgorithmController">
    <children>
@@ -56,44 +53,6 @@
                <children>
                   <VBox spacing="10.0">
                      <children>
-                        <VBox>
-                           <children>
-                              <Label text="Semilla" textFill="#001d44">
-                                 <font>
-                                    <Font name="Consolas" size="18.0" />
-                                 </font>
-                              </Label>
-                              <HBox>
-                                 <children>
-                                    <TextField prefColumnCount="8" text="1234" HBox.hgrow="ALWAYS" />
-                                    <Button mnemonicParsing="false">
-                                       <graphic>
-                                          <FontIcon iconColor="#001d44" iconLiteral="fas-dice-six" />
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox>
-                           <children>
-                              <Label text="Iteraciones" textFill="#001d44">
-                                 <font>
-                                    <Font name="Consolas" size="18.0" />
-                                 </font>
-                              </Label>
-                              <HBox>
-                                 <children>
-                                    <TextField prefColumnCount="8" text="∞" HBox.hgrow="ALWAYS" />
-                                    <Button mnemonicParsing="false">
-                                       <graphic>
-                                          <FontIcon iconColor="#001d44" iconLiteral="fas-play" />
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
                         <Label alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                            <graphic>
                               <FontIcon iconColor="#001d44" iconLiteral="fas-arrow-left" iconSize="30" onMouseClicked="#backBtnPress" />
