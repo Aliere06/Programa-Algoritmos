@@ -72,7 +72,7 @@
                               <Font name="Monospaced Regular" size="12.0" />
                            </font>
                         </TextArea>
-                        <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                        <TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                           <columns>
                             <TableColumn prefWidth="75.0" text="C1" />
                             <TableColumn prefWidth="75.0" text="C2" />
