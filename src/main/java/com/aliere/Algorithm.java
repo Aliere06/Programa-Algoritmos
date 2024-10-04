@@ -52,7 +52,7 @@ public abstract class Algorithm {
     }
 
     //GENERATE METHOD
-    public abstract RandomNumber generate(int iterations);
+    public abstract RandomNumber generate();
 
     public File exportarNumeros() {
         File archivo = new File("numeros.txt");
@@ -65,4 +65,52 @@ public abstract class Algorithm {
         }
         return archivo;
     }
+
+    public static final Algorithm SAMPLE = new Algorithm("Sample Algorithm", "code", 
+    new Parameter<Integer>("Iterations", 0){
+
+        @Override
+        public Integer validate() {
+            if (getValue() > 0) {
+                return getValue();
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public void parseString(String string) {
+            setValue(Integer.parseInt(string));
+        }
+    },
+    new Parameter<Integer>("Int Parameter", 0){
+
+        @Override
+        public Integer validate() {
+            if (getValue() > 0) {
+                return getValue();
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public void parseString(String string) {
+            setValue(Integer.parseInt(string));
+        }
+    }) {
+
+        @Override
+        public RandomNumber generate() {
+            int iterations = (int)getParameters().get(0).getValue();
+            int param1 = (int)getParameters().get(1).getValue();
+
+            for (int i = 0; i <= iterations; i++) {
+                RandomNumber r = new RandomNumber(Math.random() + param1, null);
+                System.out.println(r);
+            }
+            return null;
+        }
+        
+    };
 }

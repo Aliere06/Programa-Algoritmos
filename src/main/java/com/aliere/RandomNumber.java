@@ -13,4 +13,9 @@ public class RandomNumber {
     public RandomNumber(double value, HashMap<String, String> components) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
 }

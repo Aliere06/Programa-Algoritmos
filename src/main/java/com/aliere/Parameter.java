@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 public abstract class Parameter<T> {
     private String name;
     private T value;
+    private Class<?> type;
     private boolean isValid;
     private EventHandler<ActionEvent> action;
     
@@ -28,6 +29,9 @@ public abstract class Parameter<T> {
     public T getValue() {
         return value;
     }
+    public Class<?> getType() {
+        return type;
+    }
     public EventHandler<ActionEvent> getAction() {
         return action;
     }
@@ -36,6 +40,7 @@ public abstract class Parameter<T> {
     public Parameter(String nombre, T valor) {
         this.name = nombre;
         this.value = valor;
+        type = valor.getClass();
         validateInternal();
     }
     
@@ -52,8 +57,13 @@ public abstract class Parameter<T> {
             isValid = false;
         }
     }
-    
+
     public boolean isValid() {
         return isValid;
     }
+
+    /**Attempts to parse a string input into type T,
+     * must set the parameter's {@code value} as the parsed result
+     */
+    abstract public void parseString(String string);
 }

@@ -1,6 +1,8 @@
 package com.aliere;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -18,12 +20,20 @@ public class MenuController implements Initializable{
 
     @FXML
     private void algorithmBtnPress(ActionEvent event) {
-        Button b = (Button)event.getSource();
+        Algorithm sample_algorithm = Algorithm.SAMPLE;
+        Main.getAlgorithmController().setTitle(sample_algorithm.getName());
 
-        Main.getAlgorithmController().setTitle("Algorithm A");
-        Main.getAlgorithmController().addParameterInput(
-            new ParameterInput("Parameter 1")
-        );
+        ArrayList<Parameter<?>> parameters = sample_algorithm.getParameters();
+        ArrayList<ParameterInput> parameterInputs = new ArrayList<>();
+        for (Parameter<?> p : parameters) {
+            parameterInputs.add(new ParameterInput(p.getName()));
+        }
+        ParameterInput[] a = {};
+        Main.getAlgorithmController().addParameterInput(parameterInputs.toArray(a));
+
+        parameterInputs.get(0).setHasButton(true);
+        parameterInputs.get(0).setButtonAction(e -> Algorithm.SAMPLE.generate());
+        
         Main.setScreen(Main.Screen.ALGORITHM);
         //name(event);
     }
