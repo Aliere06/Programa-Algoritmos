@@ -1,15 +1,16 @@
 package com.aliere;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
-public class AlgorithmController implements Initializable{
+public class AlgorithmController{
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML private Label titleLabel;
+    @FXML private VBox parameterVBox;
+
+    public  void setTitle(String text) {
+        titleLabel.setText(text);
     }
     
     @FXML

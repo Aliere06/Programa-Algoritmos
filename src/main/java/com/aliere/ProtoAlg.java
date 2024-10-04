@@ -15,6 +15,15 @@ public class ProtoAlg {
         int value;
         boolean valid;
         EventHandler<ActionEvent> action;
+
+        public ProtoParam(String name) {
+            this.name = name;
+        }
+
+        public ProtoParam(String name, EventHandler<ActionEvent> action) {
+            this(name);
+            this.action = action;
+        }
     }
 
     public ProtoAlg(String name, ProtoParam... params) {

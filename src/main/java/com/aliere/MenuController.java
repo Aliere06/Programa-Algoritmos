@@ -18,8 +18,9 @@ public class MenuController implements Initializable{
 
     @FXML
     private void algorithmBtnPress(ActionEvent event) {
-        //Main.setScreen(Main.Screen.ALGORITHM);
-        name(event);
+        Main.getAlgorithmController().setTitle(((Button)event.getSource()).getText());
+        Main.setScreen(Main.Screen.ALGORITHM);
+        //name(event);
     }
 
     public static void name(ActionEvent event) {

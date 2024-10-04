@@ -16,9 +16,11 @@ public class Main extends Application{
 
         private URL resource;
         private Parent screen;
+        private FXMLLoader loader;
 
         Screen(String filename, boolean isPreCached){
             resource = getClass().getClassLoader().getResource(filename);
+            loader = new FXMLLoader(getClass().getClassLoader().getResource(filename));
             if (isPreCached) {
                 setScene();
             }
@@ -27,7 +29,7 @@ public class Main extends Application{
         private void setScene() {
             try {
                 System.out.println("\nLoading " + resource);
-                screen = FXMLLoader.load(resource);
+                screen = loader.load();
             } catch (Exception e) {
                 System.out.println("Failed to load fxml for enum: " + this.name());
                 e.printStackTrace();
@@ -40,10 +42,24 @@ public class Main extends Application{
             }
             return screen;
         }
+        public Object getController() {
+            return loader.getController();
+        }
 
     }
 
     private static Scene scene;
+
+    public static void setScreen(Screen newScreen) {
+        scene.setRoot(newScreen.getScreen());
+    }
+
+    public static AlgorithmController getAlgorithmController() {
+        return (AlgorithmController)Screen.ALGORITHM.getController();
+    }
+    public static MenuController gMenuController() {
+        return (MenuController)Screen.MENU.getController();
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -51,10 +67,6 @@ public class Main extends Application{
         stage.setTitle("Generadores Aleatorios");
         stage.setScene(scene);
         stage.show();
-    }
-
-    public static void setScreen(Screen newScreen) {
-        scene.setRoot(newScreen.getScreen());
     }
 
     public static void main(String[] args) {

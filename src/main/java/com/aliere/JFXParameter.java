@@ -20,10 +20,10 @@ public class JFXParameter extends VBox {
 
     private boolean hasButton;
 
-    @FXML Label label;
-    @FXML TextField textField;
-    @FXML Button button;
-    @FXML FontIcon buttonIcon;
+    @FXML private Label label;
+    @FXML private TextField textField;
+    @FXML private Button button;
+    @FXML private FontIcon buttonIcon;
     
     public JFXParameter() {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("Parameter.fxml"));
