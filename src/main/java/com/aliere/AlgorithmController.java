@@ -9,8 +9,11 @@ public class AlgorithmController{
     @FXML private Label titleLabel;
     @FXML private VBox parameterVBox;
 
-    public  void setTitle(String text) {
+    public void setTitle(String text) {
         titleLabel.setText(text);
+    }
+    public void addParameterInput(ParameterInput... parameterInputs) {
+        parameterVBox.getChildren().addAll(parameterInputs);
     }
     
     @FXML

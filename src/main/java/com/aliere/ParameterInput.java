@@ -14,7 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class JFXParameter extends VBox {
+public class ParameterInput extends VBox {
 
     public final Ikon DEFAULT_ICON = FontAwesomeRegular.CIRCLE;
 
@@ -25,7 +25,7 @@ public class JFXParameter extends VBox {
     @FXML private Button button;
     @FXML private FontIcon buttonIcon;
     
-    public JFXParameter() {
+    public ParameterInput() {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("Parameter.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -38,11 +38,11 @@ public class JFXParameter extends VBox {
         setHasButton(false);
     }
 
-    public JFXParameter(String text) {
+    public ParameterInput(String text) {
         this();
         setText(text);
     }
-    public JFXParameter(String text, EventHandler<ActionEvent> button_action) {
+    public ParameterInput(String text, EventHandler<ActionEvent> button_action) {
         this();
         setHasButton(true);
         setButtonIcon(DEFAULT_ICON);

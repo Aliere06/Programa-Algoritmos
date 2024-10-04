@@ -18,7 +18,12 @@ public class MenuController implements Initializable{
 
     @FXML
     private void algorithmBtnPress(ActionEvent event) {
-        Main.getAlgorithmController().setTitle(((Button)event.getSource()).getText());
+        Button b = (Button)event.getSource();
+
+        Main.getAlgorithmController().setTitle("Algorithm A");
+        Main.getAlgorithmController().addParameterInput(
+            new ParameterInput("Parameter 1")
+        );
         Main.setScreen(Main.Screen.ALGORITHM);
         //name(event);
     }
@@ -28,7 +33,7 @@ public class MenuController implements Initializable{
         System.out.println(b.getText());
         GridPane g = (GridPane)b.getParent();
         EventHandler<ActionEvent> handy = e -> {System.out.println("click!");};
-        JFXParameter p = new JFXParameter("Param 1", handy);
+        ParameterInput p = new ParameterInput("Param 1", handy);
         p.setText("testing");
         g.add(p, 1, 2);
     }
