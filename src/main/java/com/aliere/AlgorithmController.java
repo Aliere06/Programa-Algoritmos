@@ -12,7 +12,7 @@ public class AlgorithmController{
     public void setTitle(String text) {
         titleLabel.setText(text);
     }
-    public void addParameterInput(ParameterInput... parameterInputs) {
+    public void addParameterInput(ParameterInput<?>... parameterInputs) {
         parameterVBox.getChildren().addAll(parameterInputs);
     }
     

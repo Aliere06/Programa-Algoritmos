@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class Algorithm {
     private String name;
@@ -41,9 +42,10 @@ public abstract class Algorithm {
     }    
     
     //CONSTRUCTOR
-    public Algorithm(String nombre, String codigo, Parameter<?>... parametros) {
+    public Algorithm(String nombre, String codigo, String[] columns, Parameter<?>... parametros) {
         this.name = nombre;
         this.code = codigo;
+        this.columns = columns;
         this.parameters = new ArrayList<>();
         for (Parameter<?> parametro : parametros) {
             this.parameters.add(parametro);
@@ -51,7 +53,29 @@ public abstract class Algorithm {
         this.numbers = new ArrayList<>();
     }
 
-    //GENERATE METHOD
+    //GENERATION
+    public boolean parametersAreValid() {
+        for (Parameter<?> p : parameters) {
+            if (!p.isValid()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void generateList() {
+        if (!parametersAreValid()) {
+            return;
+        }
+        numbers.clear();
+        int iterations = (int)getParameters().getLast().getValue();
+        for (int i = 0; i < iterations; i++) {
+            numbers.add(generate());
+        }
+        for (RandomNumber r : numbers) {
+            System.out.println(r);
+        }
+    }
     public abstract RandomNumber generate();
 
     public File exportarNumeros() {
@@ -66,11 +90,11 @@ public abstract class Algorithm {
         return archivo;
     }
 
-    public static final Algorithm SAMPLE = new Algorithm("Sample Algorithm", "code", 
-    new Parameter<Integer>("Iterations", 0){
+    public static final Algorithm SAMPLE = new Algorithm("Sample Algorithm", "code", new String[]{"fixed add", "Xi"},
+    new Parameter<Double>("Int Parameter", 0.0){
 
         @Override
-        public Integer validate() {
+        public Double validate() {
             if (getValue() > 0) {
                 return getValue();
             } else {
@@ -80,10 +104,10 @@ public abstract class Algorithm {
 
         @Override
         public void parseString(String string) {
-            setValue(Integer.parseInt(string));
+            setValue(Double.parseDouble(string));
         }
     },
-    new Parameter<Integer>("Int Parameter", 0){
+    new Parameter<Integer>("Iterations", 0){
 
         @Override
         public Integer validate() {
@@ -102,14 +126,17 @@ public abstract class Algorithm {
 
         @Override
         public RandomNumber generate() {
-            int iterations = (int)getParameters().get(0).getValue();
-            int param1 = (int)getParameters().get(1).getValue();
+            HashMap<String, String> components = new HashMap<>();
 
-            for (int i = 0; i <= iterations; i++) {
-                RandomNumber r = new RandomNumber(Math.random() + param1, null);
-                System.out.println(r);
-            }
-            return null;
+            double param1 = (double)getParameters().get(0).getValue();
+            components.put(getColumns()[0], String.valueOf(param1));
+
+            double r = Math.random() + param1;
+            components.put(getColumns()[1], String.valueOf(r));
+
+            RandomNumber ran = new RandomNumber(r, components);
+            System.out.println(r);
+            return ran;
         }
         
     };

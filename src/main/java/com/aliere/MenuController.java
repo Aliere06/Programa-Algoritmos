@@ -2,15 +2,11 @@ package com.aliere;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
 
 public class MenuController implements Initializable{
 
@@ -24,28 +20,15 @@ public class MenuController implements Initializable{
         Main.getAlgorithmController().setTitle(sample_algorithm.getName());
 
         ArrayList<Parameter<?>> parameters = sample_algorithm.getParameters();
-        ArrayList<ParameterInput> parameterInputs = new ArrayList<>();
+        ArrayList<ParameterInput<?>> parameterInputs = new ArrayList<>();
         for (Parameter<?> p : parameters) {
-            parameterInputs.add(new ParameterInput(p.getName()));
+            parameterInputs.add(new ParameterInput<>(p));
         }
-        ParameterInput[] a = {};
-        Main.getAlgorithmController().addParameterInput(parameterInputs.toArray(a));
+        Main.getAlgorithmController().addParameterInput(new ParameterInput[]{});
 
-        parameterInputs.get(0).setHasButton(true);
-        parameterInputs.get(0).setButtonAction(e -> Algorithm.SAMPLE.generate());
+        parameterInputs.get(1).setHasButton(true);
+        parameterInputs.get(1).setButtonAction(e -> Algorithm.SAMPLE.generateList());
         
         Main.setScreen(Main.Screen.ALGORITHM);
-        //name(event);
     }
-
-    public static void name(ActionEvent event) {
-        Button b = (Button)event.getSource();
-        System.out.println(b.getText());
-        GridPane g = (GridPane)b.getParent();
-        EventHandler<ActionEvent> handy = e -> {System.out.println("click!");};
-        ParameterInput p = new ParameterInput("Param 1", handy);
-        p.setText("testing");
-        g.add(p, 1, 2);
-    }
-    
 }

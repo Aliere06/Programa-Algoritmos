@@ -1,7 +1,6 @@
 package com.aliere;
 
 import java.net.URL;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.kordamp.ikonli.Ikon;
@@ -48,6 +47,7 @@ public class ParameterInput<T> extends VBox implements Initializable{
 
     public ParameterInput(Parameter<T> parameter) {
         this();
+        this.parameter = parameter;
         setText(parameter.getName());
     }
 
@@ -60,9 +60,15 @@ public class ParameterInput<T> extends VBox implements Initializable{
             try {
                 parameter.parseString(newValue);
             } catch (Exception e) {
-                // TODO: handle exception
+                parameter.invalidate();
+                //e.printStackTrace();
             }
             parameter.validate();
+            if (!parameter.isValid()) {
+                textField.setStyle("-fx-text-fill: crimson");
+            } else {
+                textField.setStyle("-fx-text-fill: black");
+            }
         }
         
     });

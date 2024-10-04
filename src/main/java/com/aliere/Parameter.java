@@ -62,8 +62,12 @@ public abstract class Parameter<T> {
         return isValid;
     }
 
+    public void invalidate() {
+        isValid = false;
+    }
+
     /**Attempts to parse a string input into type T,
      * must set the parameter's {@code value} as the parsed result
      */
-    abstract public void parseString(String string);
+    abstract public void parseString(String string) throws Exception;
 }
