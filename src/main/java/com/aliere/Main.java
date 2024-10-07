@@ -22,11 +22,11 @@ public class Main extends Application{
             resource = getClass().getClassLoader().getResource(filename);
             loader = new FXMLLoader(getClass().getClassLoader().getResource(filename));
             if (isPreCached) {
-                setScene();
+                loadScreen();
             }
         }
 
-        private void setScene() {
+        private void loadScreen() {
             try {
                 System.out.println("\nLoading " + resource);
                 screen = loader.load();
@@ -38,7 +38,7 @@ public class Main extends Application{
 
         public Parent getScreen() {
             if (screen == null) {
-                setScene();
+                loadScreen();
             }
             return screen;
         }

@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javafx.application.Platform;
+
 public abstract class Algorithm {
     private String name;
     private String code;
@@ -70,11 +72,12 @@ public abstract class Algorithm {
         numbers.clear();
         int iterations = (int)getParameters().getLast().getValue();
         for (int i = 0; i < iterations; i++) {
-            numbers.add(generate());
+            Platform.runLater(() -> {
+                numbers.add(generate());
+                Main.getAlgorithmController().populateTable(numbers);
+            });
         }
-        for (RandomNumber r : numbers) {
-            System.out.println(r);
-        }
+        //for (RandomNumber r : numbers) { System.out.println(r); }
     }
     public abstract RandomNumber generate();
 
@@ -91,7 +94,7 @@ public abstract class Algorithm {
     }
 
     public static final Algorithm SAMPLE = new Algorithm("Sample Algorithm", "code", new String[]{"fixed add", "Xi"},
-    new Parameter<Double>("Int Parameter", 0.0){
+    new Parameter<Double>("Double Parameter", 0.0){
 
         @Override
         public Double validate() {
@@ -135,7 +138,7 @@ public abstract class Algorithm {
             components.put(getColumns()[1], String.valueOf(r));
 
             RandomNumber ran = new RandomNumber(r, components);
-            System.out.println(r);
+            System.out.println(components);
             return ran;
         }
         

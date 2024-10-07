@@ -7,13 +7,20 @@
     <groupId>com.aliere</groupId>
     <artifactId>RNG_Algorithms</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>RNG_Algorithms</name>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <maven.version>3.8.0</maven.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>3.8.1</version>
+        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
@@ -54,6 +61,24 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>com.aliere.Main</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.version}</version>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.gluonhq</groupId>
+                <artifactId> gluonfx-maven-plugin</artifactId>
+                <version>1.0.24</version>
+                <configuration>
+                    <mainClass>com.aliere.Main</mainClass>
+                    <graalvmHome>C:\Program Files (x86)\graalvm-jdk-21.0.4+8.1</graalvmHome>
                 </configuration>
             </plugin>
         </plugins>

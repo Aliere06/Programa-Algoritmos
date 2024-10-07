@@ -1,0 +1,30 @@
+[Fri Oct 04 14:49:00 GMT-06:00 2024][INFO] ==================== COMPILE TASK ====================
+[Fri Oct 04 14:49:02 GMT-06:00 2024][INFO] We will now compile your code for x86_64-microsoft-windows. This may take some time.
+[Fri Oct 04 14:49:02 GMT-06:00 2024][FINE] Processing JavaStatic dependencies at C:\Users\Yoga L13\.gluon\substrate\javaStaticSdk\24-2\windows-x86_64\lib
+[Fri Oct 04 14:49:02 GMT-06:00 2024][FINE] Processing JavaFXStatic dependencies at C:\Users\Yoga L13\.gluon\substrate\javafxStaticSdk\24-ea+7.1\windows-x86_64\sdk\lib
+[Fri Oct 04 14:49:02 GMT-06:00 2024][INFO] Downloading Java Static Libs...
+[Fri Oct 04 14:49:02 GMT-06:00 2024][FINE] Processing zip file: url = https://github.com/gluonhq/vmone/releases/download/gvm-24-2/vmone-windows-x64.zip, zip = C:\Users\Yoga L13\.gluon\substrate\gvm-24-2\vmone-windows-x64.zip, subDir = javaStaticSdk, levels = [24-2, windows-x86_64], md5 = javaStaticSdk-windows-x86_64.md5
+[Fri Oct 04 14:49:02 GMT-06:00 2024][FINE] download from link: https://github.com/gluonhq/vmone/releases/download/gvm-24-2/vmone-windows-x64.zip
+[Fri Oct 04 14:49:03 GMT-06:00 2024][SEVERE] download from link failed with status: 404, and body: null
+Check the log files under C:\Users\Yoga L13\Documents\School\S5\SI - Simulación\T2 - Números Pseudoaleatorios\Programa Algoritmos\target\gluonfx\x86_64-windows\gvm\log
+And please check https://docs.gluonhq.com/ for more information.
+[Fri Oct 04 14:53:31 GMT-06:00 2024][INFO] ==================== COMPILE TASK ====================
+[Fri Oct 04 14:53:33 GMT-06:00 2024][INFO] We will now compile your code for x86_64-microsoft-windows. This may take some time.
+[Fri Oct 04 14:53:33 GMT-06:00 2024][FINE] Processing JavaStatic dependencies at C:\Users\Yoga L13\.gluon\substrate\javaStaticSdk\24-2\windows-x86_64\lib
+[Fri Oct 04 14:53:33 GMT-06:00 2024][FINE] Processing JavaFXStatic dependencies at C:\Users\Yoga L13\.gluon\substrate\javafxStaticSdk\24-ea+7.1\windows-x86_64\sdk\lib
+[Fri Oct 04 14:53:33 GMT-06:00 2024][INFO] Downloading Java Static Libs...
+[Fri Oct 04 14:53:33 GMT-06:00 2024][FINE] Processing zip file: url = https://github.com/gluonhq/vmone/releases/download/gvm-24-2/vmone-windows-x64.zip, zip = C:\Users\Yoga L13\.gluon\substrate\gvm-24-2\vmone-windows-x64.zip, subDir = javaStaticSdk, levels = [24-2, windows-x86_64], md5 = javaStaticSdk-windows-x86_64.md5
+[Fri Oct 04 14:53:33 GMT-06:00 2024][FINE] download from link: https://github.com/gluonhq/vmone/releases/download/gvm-24-2/vmone-windows-x64.zip
+[Fri Oct 04 14:53:33 GMT-06:00 2024][SEVERE] download from link failed with status: 404, and body: null
+Check the log files under C:\Users\Yoga L13\Documents\School\S5\SI - Simulación\T2 - Números Pseudoaleatorios\Programa Algoritmos\target\gluonfx\x86_64-windows\gvm\log
+And please check https://docs.gluonhq.com/ for more information.
+[Fri Oct 04 15:00:15 GMT-06:00 2024][INFO] ==================== COMPILE TASK ====================
+[Fri Oct 04 15:00:16 GMT-06:00 2024][INFO] We will now compile your code for x86_64-microsoft-windows. This may take some time.
+[Fri Oct 04 15:00:16 GMT-06:00 2024][FINE] Processing JavaStatic dependencies at C:\Users\Yoga L13\.gluon\substrate\javaStaticSdk\24-2\windows-x86_64\lib
+[Fri Oct 04 15:00:16 GMT-06:00 2024][FINE] Processing JavaFXStatic dependencies at C:\Users\Yoga L13\.gluon\substrate\javafxStaticSdk\24-ea+7.1\windows-x86_64\sdk\lib
+[Fri Oct 04 15:00:16 GMT-06:00 2024][INFO] Downloading Java Static Libs...
+[Fri Oct 04 15:00:16 GMT-06:00 2024][FINE] Processing zip file: url = https://github.com/gluonhq/vmone/releases/download/gvm-24-2/vmone-windows-x64.zip, zip = C:\Users\Yoga L13\.gluon\substrate\gvm-24-2\vmone-windows-x64.zip, subDir = javaStaticSdk, levels = [24-2, windows-x86_64], md5 = javaStaticSdk-windows-x86_64.md5
+[Fri Oct 04 15:00:16 GMT-06:00 2024][FINE] download from link: https://github.com/gluonhq/vmone/releases/download/gvm-24-2/vmone-windows-x64.zip
+[Fri Oct 04 15:00:17 GMT-06:00 2024][SEVERE] download from link failed with status: 404, and body: null
+Check the log files under C:\Users\Yoga L13\Documents\School\S5\SI - Simulación\T2 - Números Pseudoaleatorios\Programa Algoritmos\target\gluonfx\x86_64-windows\gvm\log
+And please check https://docs.gluonhq.com/ for more information.
