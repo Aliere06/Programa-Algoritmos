@@ -54,10 +54,13 @@ public class Main extends Application{
         scene.setRoot(newScreen.getScreen());
     }
 
+    /*protected static Stage getStage() {
+        return 
+    }*/
     public static AlgorithmController getAlgorithmController() {
         return (AlgorithmController)Screen.ALGORITHM.getController();
     }
-    public static MenuController gMenuController() {
+    public static MenuController getMenuController() {
         return (MenuController)Screen.MENU.getController();
     }
 

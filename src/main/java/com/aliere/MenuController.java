@@ -19,6 +19,7 @@ public class MenuController implements Initializable{
     private void algorithmBtnPress(ActionEvent event) {
         Algorithm sample_algorithm = Algorithm.SAMPLE;
         Main.getAlgorithmController().setTitle(sample_algorithm.getName());
+        Main.getAlgorithmController().setCurrentAlgorithm(sample_algorithm);
 
         ArrayList<Parameter<?>> parameters = sample_algorithm.getParameters();
         ArrayList<ParameterInput<?>> parameterInputs = new ArrayList<>();
@@ -33,6 +34,7 @@ public class MenuController implements Initializable{
 
         Main.getAlgorithmController().buildTable(Algorithm.SAMPLE.getColumns());
         
+        Main.getAlgorithmController().clearNotification();
         Main.setScreen(Main.Screen.ALGORITHM);
     }
 }

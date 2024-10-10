@@ -70,30 +70,34 @@ public abstract class Algorithm {
             return;
         }
         numbers.clear();
-        int iterations = (int)getParameters().getLast().getValue();
-        for (int i = 0; i < iterations; i++) {
-            Platform.runLater(() -> {
+        Platform.runLater(() -> {
+            int iterations = (int)getParameters().getLast().getValue();
+            for (int i = 0; i < iterations; i++) {
                 numbers.add(generate());
-                Main.getAlgorithmController().populateTable(numbers);
-            });
-        }
+            }
+            Main.getAlgorithmController().populateTable(numbers);
+        });
         //for (RandomNumber r : numbers) { System.out.println(r); }
     }
     public abstract RandomNumber generate();
 
-    public File exportarNumeros() {
-        File archivo = new File("numeros.txt");
-        try (FileWriter writer = new FileWriter(archivo)) {
-            for (RandomNumber num : numbers) {
-                writer.write(num.getValue() + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void exportarNumeros(File numbersFile) throws IOException {
+        FileWriter writer = new FileWriter(numbersFile);
+        for (RandomNumber num : numbers) {
+            writer.write(num.getValue() + "\n");
         }
-        return archivo;
+        writer.close();
     }
 
+    /* SAMPLE ALGORITHM
+     * - Name
+     * - Generation code (optional)
+     * - Table column headers
+     * - PARAMETERS
+     */
+
     public static final Algorithm SAMPLE = new Algorithm("Sample Algorithm", "code", new String[]{"fixed add", "Xi"},
+    //PARAMETERS
     new Parameter<Double>("Double Parameter", 0.0){
 
         @Override
@@ -126,7 +130,7 @@ public abstract class Algorithm {
             setValue(Integer.parseInt(string));
         }
     }) {
-
+        //GENERATION METHOD
         @Override
         public RandomNumber generate() {
             HashMap<String, String> components = new HashMap<>();
@@ -141,6 +145,5 @@ public abstract class Algorithm {
             System.out.println(components);
             return ran;
         }
-        
     };
 }
