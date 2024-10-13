@@ -2,8 +2,8 @@ package com.aliere;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -37,7 +37,9 @@ public class AlgorithmController{
     //@FXML private TableView<RandomNumber> tableView;
 
     private Algorithm currentAlgorithm;
+    private LinkedHashMap<String, ParameterInput<?>> parameterInputs = new LinkedHashMap<>();
 
+    //SETS
     public void setCurrentAlgorithm(Algorithm currentAlgorithm) {
         this.currentAlgorithm = currentAlgorithm;
     }
@@ -45,14 +47,40 @@ public class AlgorithmController{
         titleLabel.setText(text);
     }
     public void addParameterInput(ParameterInput<?>... parameterInputs) {
-        parameterVBox.getChildren().addAll(parameterInputs);
+        parameterVBox.getChildren().clear();
+        for (ParameterInput<?> parameterInput : parameterInputs) {
+            this.parameterInputs.put(parameterInput.getName(), parameterInput);
+            parameterVBox.getChildren().add(parameterInput);
+        }
     }
 
+    //GETS
     protected GridPane getGridTableData() {
         return gridTableData;
     }
+    public Algorithm getCurrentAlgorithm() {
+        return currentAlgorithm;
+    }
+    public LinkedHashMap<String, ParameterInput<?>> getParameterInputs() {
+        return parameterInputs;
+    }
     //public TableView<RandomNumber> getTableView() { return tableView; }
 
+    //ALGRITHM LOADING
+    protected void loadAlgorithm(Algorithm newAlgorithm) {
+        setCurrentAlgorithm(newAlgorithm);
+        setTitle(newAlgorithm.getName());
+        parameterInputs.clear();
+        parameterVBox.getChildren().clear();
+        for (Parameter<?> p : newAlgorithm.getParameters().values()) {
+            parameterInputs.put(p.getName(), new ParameterInput<>(p));
+        }
+        parameterVBox.getChildren().addAll(parameterInputs.values());
+        buildTable(newAlgorithm.getColumns());
+        clearNotification();
+    }
+
+    //GRID TABLE
     public void buildTable(String[] columns) {
         cleanGridPane(gridTableHeader);
         cleanGridPane(gridTableData);
@@ -125,6 +153,7 @@ public class AlgorithmController{
         return dataLabel;
     }
 
+    //BUTTON INPUTS
     @FXML
     public void backBtnPress() {
         Main.setScreen(Main.Screen.MENU);
@@ -136,7 +165,7 @@ public class AlgorithmController{
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new ExtensionFilter("txt files", ".txt"));
         fileChooser.setInitialFileName(String.format("%s(%f).txt", 
-        titleLabel.getText(), currentAlgorithm.getParameters().getFirst().getValue()));
+        titleLabel.getText(), currentAlgorithm.getParameters().get("Seed").getValue()));
         File numbersFile = fileChooser.showSaveDialog(mainVBox.getScene().getWindow());
         try {
             currentAlgorithm.exportarNumeros(numbersFile);
@@ -146,6 +175,12 @@ public class AlgorithmController{
         }
     }
 
+    @FXML
+    public void notifBtnPress() {
+        clearNotification();
+    }
+
+    //NOTIFICATIONS
     public void showNotification(String notification) {
         clearNotification();
         notificationLabel.setText(notification);
@@ -155,10 +190,5 @@ public class AlgorithmController{
 
     public void clearNotification() {
         notificationBar.getChildren().clear();
-    }
-
-    @FXML
-    public void notifBtnPress() {
-        clearNotification();
     }
 }

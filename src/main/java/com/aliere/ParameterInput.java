@@ -22,7 +22,7 @@ import javafx.scene.layout.VBox;
 
 public class ParameterInput<T> extends VBox implements Initializable{
 
-    public static final Ikon DEFAULT_ICON = FontAwesomeRegular.CIRCLE;
+    protected static final Ikon DEFAULT_ICON = FontAwesomeRegular.CIRCLE;
 
     private Parameter<T> parameter;
     private boolean hasButton;
@@ -32,7 +32,8 @@ public class ParameterInput<T> extends VBox implements Initializable{
     @FXML private Button button;
     @FXML private FontIcon buttonIcon;
     
-    private ParameterInput() {
+    protected ParameterInput(Parameter<T> parameter) {
+        this.parameter = parameter;
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("Parameter.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -42,14 +43,34 @@ public class ParameterInput<T> extends VBox implements Initializable{
         } catch (Exception e) {
             e.printStackTrace();
         }
+        setLabelText(parameter.getName());
         setHasButton(false);
+        if (parameter.getButtonAction() != null) {
+            setHasButton(true);
+            setButtonIcon(parameter.getButtonIcon() == null ? DEFAULT_ICON : parameter.getButtonIcon());
+            setButtonAction(parameter.getButtonAction());
+        }
+        if (parameter.isGenerated()) {
+            textField.setEditable(false);
+            textField.setStyle("-fx-control-inner-background: lightgray");
+        }
     }
 
-    public ParameterInput(Parameter<T> parameter) {
-        this();
-        this.parameter = parameter;
-        setText(parameter.getName());
+    /*
+    protected ParameterInput(Parameter<T> parameter, EventHandler<ActionEvent> button_action, boolean isGenerated) {
+        this(parameter);
+        if (button_action != null) {
+            setHasButton(true);
+            setButtonIcon(DEFAULT_ICON);
+            setButtonAction(button_action);
+        }
+        if (isGenerated) {
+            textField.setEditable(false);
+            textField.setStyle("-fx-control-inner-background: lightgray");
+        }
+        this.isGenerated = isGenerated;
     }
+     */
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -65,28 +86,25 @@ public class ParameterInput<T> extends VBox implements Initializable{
             }
             parameter.validate();
             if (!parameter.isValid()) {
-                textField.setStyle("-fx-text-fill: crimson");
+                textField.setStyle("-fx-control-inner-background: mistyrose");
             } else {
-                textField.setStyle("-fx-text-fill: black");
+                textField.setStyle("-fx-control-inner-background: white");
             }
         }
         
     });
     }
 
-    public ParameterInput(String text) {
-        this();
-        setText(text);
-    }
-    public ParameterInput(String text, EventHandler<ActionEvent> button_action) {
-        this();
-        setHasButton(true);
-        setButtonIcon(DEFAULT_ICON);
-        setButtonAction(button_action);
-    }
-
-    public void setText(String text) {
+    public void setLabelText(String text) {
         label.setText(text);
+    }
+    public void setGenerated(boolean isEditable) {
+        textField.setEditable(isEditable);
+    }
+    public void setInput(String text) {
+        String style = textField.getStyle();
+        textField.setText(text);
+        textField.setStyle(style);
     }
     public void setHasButton(boolean hasButton) {
         if (hasButton) {
@@ -96,17 +114,29 @@ public class ParameterInput<T> extends VBox implements Initializable{
         }
         this.hasButton = hasButton;
     }
-    public void setButtonAction(EventHandler<ActionEvent> action) {
+    protected void setButtonAction(EventHandler<ActionEvent> action) {
         button.setOnAction(action);
     }
-    public void setButtonIcon(Ikon buttonIcon) {
+    protected void setButtonIcon(Ikon buttonIcon) {
         this.buttonIcon.setIconCode(buttonIcon);
     }
 
+    public String getName() {
+        return label.getText();
+    }
     public String getInput() {
         return textField.getText();
     }
-    public Boolean getHasButton() {
+    public T getValue() {
+        return parameter.getValue();
+    }
+    public Boolean hasButton() {
         return hasButton;
+    }
+    protected TextField getTextField() {
+        return textField;
+    }
+    public Parameter<T> getParameter() {
+        return parameter;
     }
 }

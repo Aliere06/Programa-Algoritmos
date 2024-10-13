@@ -20,7 +20,7 @@ public class ProtoAlg {
             this.name = name;
         }
 
-        public ProtoParam(String name, EventHandler<ActionEvent> action) {
+        protected ProtoParam(String name, EventHandler<ActionEvent> action) {
             this(name);
             this.action = action;
         }

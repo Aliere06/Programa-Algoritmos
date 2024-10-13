@@ -2,7 +2,9 @@ package com.aliere;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -17,24 +19,23 @@ public class MenuController implements Initializable{
 
     @FXML
     private void algorithmBtnPress(ActionEvent event) {
+        /*
         Algorithm sample_algorithm = Algorithm.SAMPLE;
         Main.getAlgorithmController().setTitle(sample_algorithm.getName());
         Main.getAlgorithmController().setCurrentAlgorithm(sample_algorithm);
 
-        ArrayList<Parameter<?>> parameters = sample_algorithm.getParameters();
-        ArrayList<ParameterInput<?>> parameterInputs = new ArrayList<>();
+        HashMap<String, Parameter<?>> parameters = sample_algorithm.getParameters();
+        HashMap<String, ParameterInput<?>> parameterInputs = new HashMap<>();
+        for (Parameter<?> p : parameters.values()) {
+            parameterInputs.put(p.getName(), new ParameterInput<>(p));
+        }
+        parameterInputs.get("Iterations").setHasButton(true);
+        parameterInputs.get("Iterations").setButtonAction(e -> Algorithm.SAMPLE.generateList());
+        Main.getAlgorithmController().addParameterInput(parameterInputs.values().toArray(new ParameterInput[0]));
+        */
         Platform.runLater(() -> {
-            for (Parameter<?> p : parameters) {
-                parameterInputs.add(new ParameterInput<>(p));
-            }
-            Main.getAlgorithmController().addParameterInput(parameterInputs.toArray(new ParameterInput[]{}));
-            parameterInputs.get(1).setHasButton(true);
-            parameterInputs.get(1).setButtonAction(e -> Algorithm.SAMPLE.generateList());
+            Main.getAlgorithmController().loadAlgorithm(Algorithm.SAMPLE);
         });
-
-        Main.getAlgorithmController().buildTable(Algorithm.SAMPLE.getColumns());
-        
-        Main.getAlgorithmController().clearNotification();
         Main.setScreen(Main.Screen.ALGORITHM);
     }
 }

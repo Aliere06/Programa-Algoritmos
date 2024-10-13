@@ -1,5 +1,9 @@
 package com.aliere;
 
+import java.util.LinkedHashMap;
+
+import org.kordamp.ikonli.Ikon;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
@@ -8,7 +12,9 @@ public abstract class Parameter<T> {
     private T value;
     private Class<?> type;
     private boolean isValid;
-    private EventHandler<ActionEvent> action;
+    private EventHandler<ActionEvent> buttonAction;
+    private Ikon buttonIcon;
+    private boolean isGenerated;
     
     //SETS
     public void setName(String name) {
@@ -18,8 +24,14 @@ public abstract class Parameter<T> {
         this.value = valor;
         validateInternal();
     }
-    public void setAction(EventHandler<ActionEvent> accion) {
-        this.action = accion;
+    protected void setButtonAction(EventHandler<ActionEvent> accion) {
+        this.buttonAction = accion;
+    }
+    protected void setButtonIcon(Ikon buttonIcon) {
+        this.buttonIcon = buttonIcon;
+    }
+    public void setGenerated(boolean isGenerated) {
+        this.isGenerated = isGenerated;
     }
 
     //GETS
@@ -32,16 +44,33 @@ public abstract class Parameter<T> {
     public Class<?> getType() {
         return type;
     }
-    public EventHandler<ActionEvent> getAction() {
-        return action;
+    protected EventHandler<ActionEvent> getButtonAction() {
+        return buttonAction;
+    }
+    protected Ikon getButtonIcon() {
+        return buttonIcon;
+    }
+    public boolean isGenerated() {
+        return isGenerated;
     }
     
     //CONSTRUCTOR
-    public Parameter(String nombre, T valor) {
-        this.name = nombre;
-        this.value = valor;
-        type = valor.getClass();
+    public Parameter(String name, T value) {
+        this.name = name;
+        this.value = value;
+        type = value.getClass();
         validateInternal();
+        this.buttonAction = null;
+        this.isGenerated = false;
+    }
+
+    protected Parameter(String name, T value, EventHandler<ActionEvent> action, Ikon buttonIcon, boolean isGenerated) {
+        this(name, value);
+        if (action != null) {
+            this.buttonAction = action;
+        }
+        this.buttonIcon = buttonIcon;
+        this.isGenerated = isGenerated;
     }
     
     //VALIDATION
@@ -70,4 +99,7 @@ public abstract class Parameter<T> {
      * must set the parameter's {@code value} as the parsed result
      */
     abstract public void parseString(String string) throws Exception;
+
+    public void bind(LinkedHashMap<String, ParameterInput<?>> parameterInputs) {
+    }
 }

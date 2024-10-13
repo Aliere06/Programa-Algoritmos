@@ -36,7 +36,7 @@ public class Main extends Application{
             }
         }
 
-        public Parent getScreen() {
+        protected Parent getScreen() {
             if (screen == null) {
                 loadScreen();
             }
@@ -65,6 +65,7 @@ public class Main extends Application{
     }
 
     @Override
+    @SuppressWarnings("exports")
     public void start(Stage stage) throws Exception {
         scene = new Scene(Screen.MENU.getScreen(),600,400);
         stage.setTitle("Generadores Aleatorios");
