@@ -168,7 +168,7 @@ public class AlgorithmController{
         titleLabel.getText(), currentAlgorithm.getParameters().get("Seed").getValue()));
         File numbersFile = fileChooser.showSaveDialog(mainVBox.getScene().getWindow());
         try {
-            currentAlgorithm.exportarNumeros(numbersFile);
+            currentAlgorithm.exportNumbers(numbersFile);
             showNotification("Archivo exportado exitosamente");
         } catch (Exception e) {
             showNotification("Error al exportar el archivo: " + e.getMessage());

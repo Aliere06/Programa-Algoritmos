@@ -9,7 +9,7 @@ import javafx.event.EventHandler;
 
 public abstract class Parameter<T> {
     private String name;
-    private T value;
+    private T value; //TODO: Change value to an observable property to allow for bindings
     private Class<?> type;
     private boolean isValid;
     private EventHandler<ActionEvent> buttonAction;
