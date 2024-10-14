@@ -1,7 +1,8 @@
+com\aliere\Program.class
 com\aliere\Algorithm$2.class
 com\aliere\ProtoAlg.class
 com\aliere\MenuController.class
-com\aliere\Window$Screen.class
+com\aliere\Program$Screen.class
 com\aliere\Algorithm$4.class
 com\aliere\AlgorithmController.class
 com\aliere\ParameterInput$1.class
@@ -15,4 +16,3 @@ com\aliere\Algorithm$3.class
 com\aliere\RandomNumber.class
 com\aliere\Main.class
 com\aliere\Validations.class
-com\aliere\Window.class
