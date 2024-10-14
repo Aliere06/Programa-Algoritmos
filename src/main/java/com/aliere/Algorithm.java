@@ -77,9 +77,8 @@ public abstract class Algorithm {
         this.randomNumbers = new ArrayList<>();
     }
 
-    //GENERATION METHODS
-
-    //Parameters Are Valid
+    
+    //PARAMETERS ARE VALID
     /**Loops through the parameter map and checks for invalid parameter values.
      * @return {@code true} if all of the parameter's values are valid.
      * @throws InvalidParameterException if any of the parameter's values are invalid.
@@ -89,12 +88,14 @@ public abstract class Algorithm {
             if (!p.isValid()) { //Check if parameter value is valid
                 throw new InvalidParameterException(
                     String.format("Value for parameter \"%s\" is invalid", p.getName())
-                );
+                    );
+                }
             }
-        }
         return true;
     }
 
+    //GENERATION METHODS
+        
     //Generate List
     /**<p> Invokes {@link #parametersAreValid()} to check if all parameter values are valid,
      * if they are it generates and adds random numbers to the {@code randomNumbers} 
@@ -146,7 +147,7 @@ public abstract class Algorithm {
      */
     public abstract RandomNumber generate();
 
-    //Export Numbers
+    //EXPORT NUMBERS
     /**<p> Writes the values of all the {@code randomRumber} objects in the
      * {@code randomNumbers} ArrayList to a file.
      * 
