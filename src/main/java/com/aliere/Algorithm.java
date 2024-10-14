@@ -706,13 +706,38 @@ public abstract class Algorithm {
                 setValue(Long.parseLong(string));
             }
 
-        }
+        }, 
+        Parameter.iterationsParameter(e -> Algorithm.BLUM_BLUM_SHUB.generateList())
     ) {
 
+        @SuppressWarnings("unchecked")
         @Override
         public RandomNumber generate() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'generate'");
+            LinkedHashMap<String, String> components = new LinkedHashMap<>();
+
+            //Parameter values
+            long m = (long)getParameters().get("m").getValue();
+
+            //Generation steps
+            int x0 = (int)getParameters().get("Semilla").getValue();
+            components.put(getColumns()[0], String.valueOf(x0));
+
+            long x0_squared = (long)x0 * x0;
+            components.put(getColumns()[1], String.valueOf(x0_squared));
+
+            int modM = (int)(x0_squared % m);
+            components.put(getColumns()[2], String.valueOf(modM));
+
+            double ri = (double)modM / (m - 1);
+            components.put(getColumns()[3], String.valueOf(ri));
+
+            //Update parameter values
+            Parameter<Integer> seed = (Parameter<Integer>)getParameters().get("Semilla");
+            seed.setValue(modM);
+
+            //Build and return RandomNumber
+            RandomNumber ran = new RandomNumber(ri, components);
+            return ran;
         }
         
     };
