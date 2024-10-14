@@ -137,7 +137,8 @@ public abstract class Algorithm {
                     int runningSeed = -1;
                     if (this == CUADRADOS_MEDIOS || this == PRODUCTOS_MEDIOS || this == MULTIPLICADOR_CONSTANTE) {
                         while (runningSeed != 0) {
-                            if (randomNumbers.add(generate())) {
+                            //System.out.println("inside of the loop");
+                            if (randomNumbers.add(generate()) && randomNumbers.size() < 1000) {
                                 runningSeed = (int)getParameters().get("Semilla").getValue();
                                 //System.out.println("Running seed: " + runningSeed);
                             } else {
@@ -145,6 +146,8 @@ public abstract class Algorithm {
                                 runningSeed = 0;
                             }
                         }
+                        System.out.println("out of the loop");
+                        System.out.println(randomNumbers.size());
                     } else {
                         /*For congruential algorithms, step through the first 2 iterations
                         *to determine the true seed*/
@@ -167,11 +170,16 @@ public abstract class Algorithm {
 
                 } else {
                     for (int i = 0; i < iterations; i++) {
-                        randomNumbers.add(generate()); //Generate numbers up to the iteration count
+                        if (!randomNumbers.add(generate())) {
+                            System.out.println("valor repetido");
+                        }
+                        ; //Generate numbers up to the iteration count
                     }
                 }
 
+                System.out.println("building table");
                 Program.getAlgorithmController().populateTable(randomNumbers); //Populate GUI table
+                System.out.println("Table built");
                 for (ParameterInput<?> pInput : Program.getAlgorithmController().getParameterInputs().values()) {
                     pInput.refreshValue();
                 }
@@ -300,7 +308,6 @@ public abstract class Algorithm {
         @SuppressWarnings("unchecked")
         @Override
         public RandomNumber generate() {
-            System.out.println("generating");
             LinkedHashMap<String, String> components = new LinkedHashMap<>();
 
             //Generation steps
@@ -574,12 +581,12 @@ public abstract class Algorithm {
             seed.setValue(modM);
 
             //Build and return RandomNumber
-            RandomNumber ran = new RandomNumber(x0, components);
+            RandomNumber ran = new RandomNumber(ri, components);
             return ran;
         }
     };
     
-    // ADDITIONAL CONGRUENTIAL ADDITIVE ALGORITHM INSTANCE
+    // CONGRUENTIAL ADDITIVE ALGORITHM INSTANCE
     public static final Algorithm CONGRUENTIAL_ADDITIVE = new Algorithm("Congruential Additive Generator", "code", 
     new String[]{"Iteration", "Xi", "Xi+1"},
     //PARAMETERS
@@ -637,5 +644,76 @@ public abstract class Algorithm {
             RandomNumber ran = new RandomNumber(seed, components);
             return ran;
         }
-    };   
+    };
+
+    // MULTIPLICATIVE CONGRUENTIAL ALGORITHM
+    public static final Algorithm BLUM_BLUM_SHUB = new Algorithm(
+        "Algoritmo de Blum Blum Sub", "code", new String[]{"Xn", "Xn^2", "Mod(m)", "Ri"}, 
+        Parameter.seedParameter(),
+        new Parameter<Integer>("p", 0) {
+
+            @Override
+            public Integer validate() {
+                if (Parameter.isPrime(getValue()) && getValue() % 4 == 3) {
+                    return getValue();
+                } else {
+                    return null;
+                }
+            }
+
+            @Override
+            public void parseString(String string) throws Exception {
+                setValue(Integer.parseInt(string));
+            }
+            
+        }, 
+        new Parameter<Integer>("q", 0) {
+
+            @Override
+            public Integer validate() {
+                if (Parameter.isPrime(getValue()) && getValue() % 4 == 3) {
+                    return getValue();
+                } else {
+                    return null;
+                }
+            }
+
+            @Override
+            public void parseString(String string) throws Exception {
+                setValue(Integer.parseInt(string));
+            }
+            
+        }, 
+        new Parameter<Long>("m", 0L, 
+            e -> {
+                AlgorithmController ac = Program.getAlgorithmController();
+                int p = (int)ac.getParameterInputs().get("p").getValue();
+                int q = (int)ac.getParameterInputs().get("q").getValue();
+                ac.getParameterInputs().get("m").setInput(String.valueOf(p * q));
+            }, FontAwesomeSolid.SYNC_ALT, true) {
+
+            @Override
+            public Long validate() {
+                if (getValue() > 0) {
+                    return getValue();
+                } else {
+                    return null;
+                }
+            }
+
+            @Override
+            public void parseString(String string) throws Exception {
+                setValue(Long.parseLong(string));
+            }
+
+        }
+    ) {
+
+        @Override
+        public RandomNumber generate() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'generate'");
+        }
+        
+    };
 }

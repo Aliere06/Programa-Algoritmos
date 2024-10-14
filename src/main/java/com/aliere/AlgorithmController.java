@@ -164,10 +164,13 @@ public class AlgorithmController{
             gridTableData.add(dataLabel, c, 0);
             c++;
         }
+        System.out.println("First data row created");
 
         //Create and add the rest of the rows from the RandomNumber list
+        RandomNumber[] dataArray = data.toArray(new RandomNumber[0]);
+        System.out.println(dataArray.length);
         int i = 1;
-        for (RandomNumber r : data) {
+        for (RandomNumber r : dataArray) {
             gridTableData.getRowConstraints().add(new RowConstraints(
                 -1, -1, -1, Priority.NEVER, VPos.BASELINE, false
             ));
@@ -177,8 +180,10 @@ public class AlgorithmController{
                 gridTableData.add(dataLabel, j, i);
                 j++;
             }
+            //System.out.println(dataArray.length);
             i++;
         }
+        System.out.println("finished building from set");
     }
 
     //Clean GridPane

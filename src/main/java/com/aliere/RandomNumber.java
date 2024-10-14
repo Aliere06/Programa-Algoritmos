@@ -31,6 +31,7 @@ public class RandomNumber {
         try {
             RandomNumber r = (RandomNumber)obj;
             if (this.getValue() == r.getValue()) {
+                System.out.println("number: " + this.value + " equal to " + r.value);
                 return true;
             } else {
                 return false;
