@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox style="-fx-background-color: linear-gradient(to top, lightgray, white 10%);" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aliere.MenuController">
+<VBox style="-fx-background-color: linear-gradient(to top, lightgray, white 10%);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aliere.MenuController">
    <children>
       <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #001d44;" text="Generadores de Num. Aleatorios" textFill="WHITE" underline="true" VBox.vgrow="NEVER">
          <font>

@@ -25,4 +25,18 @@ public class RandomNumber {
     public String toString() {
         return String.valueOf(value);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        try {
+            RandomNumber r = (RandomNumber)obj;
+            if (this.getValue() == r.getValue()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

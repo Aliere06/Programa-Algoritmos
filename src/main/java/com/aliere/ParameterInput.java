@@ -95,6 +95,12 @@ public class ParameterInput<T> extends VBox implements Initializable{
     });
     }
 
+    public void refreshValue() {
+        String input = getInput();
+        setInput("");
+        setInput(input);
+    }
+
     public void setLabelText(String text) {
         label.setText(text);
     }

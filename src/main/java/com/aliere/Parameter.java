@@ -1,8 +1,7 @@
 package com.aliere;
 
-import java.util.LinkedHashMap;
-
 import org.kordamp.ikonli.Ikon;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -95,11 +94,87 @@ public abstract class Parameter<T> {
         isValid = false;
     }
 
+    //M. IS PRIME
+    public static boolean isPrime(long num) {
+        if ((num <= 1) || (num > 2 && num%2 == 0)) {
+            return false;
+        }
+        long top = (long)Math.sqrt(num) + 1;
+        for(int i = 3; i < top; i+=2){
+            if(num % i == 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //M. LARGEST RELATIVE PRIME
+    public static long largestRelativePrime(long num) {
+        for (long i = num - 1; i > 0; i--) {
+            if (greatestCommonDivisor(i, num) == 1) {
+                return i;
+            }
+        }
+        return 2;
+    }
+
+    //M. GREATEST COMMON DIVISOR
+    public static long greatestCommonDivisor(long a, long b) {
+        if (a <= 0 || b <= 0) {
+            throw new IllegalArgumentException("Inputs must be positive");
+        }
+        while (a != b) {
+            if (Math.abs(a - b) == 1) {
+                return 1;
+            } else if (a > b) {
+                a = a - b;
+            } else {
+                b = b - a;
+            }
+        }
+        return a;
+    }
+
     /**Attempts to parse a string input into type T,
      * must set the parameter's {@code value} as the parsed result
      */
     abstract public void parseString(String string) throws Exception;
 
-    public void bind(LinkedHashMap<String, ParameterInput<?>> parameterInputs) {
+    public static Parameter<Integer> seedParameter() {
+        return new Parameter<Integer>("Semilla", 0) {
+
+            @Override
+            public Integer validate() {
+                if (getValue() > 0) {
+                    return getValue();
+                } else {
+                    return null;
+                }
+            }
+    
+            @Override
+            public void parseString(String string) {
+                setValue(Integer.parseInt(string));
+            }
+        };
+    }
+
+    protected static Parameter<Integer> iterationsParameter(EventHandler<ActionEvent> buttonAction) {
+        return new Parameter<Integer>("Iteraciones", 0, buttonAction, FontAwesomeSolid.PLAY, false){
+
+            @Override
+            public Integer validate() {
+                if (getValue() >= 0) {
+                    return getValue();
+                } else {
+                    return null;
+                }
+            }
+    
+            @Override
+            public void parseString(String string) {
+                setValue(Integer.parseInt(string));
+            }
+        };
     }
 }

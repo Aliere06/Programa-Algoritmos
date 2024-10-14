@@ -1,7 +1,7 @@
 package com.aliere;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 
 import javafx.fxml.FXML;
@@ -136,7 +136,7 @@ public class AlgorithmController{
      * @param data the ArrayList of {@code RandomNumber} objects used to populate
      * the table.
      */
-    public void populateTable(ArrayList<RandomNumber> data) {
+    public void populateTable(LinkedHashSet<RandomNumber> data) {
         //Clear the previous contents of the data GridPane
         gridTableData.getChildren().clear();
         gridTableData.getRowConstraints().clear();
@@ -217,7 +217,7 @@ public class AlgorithmController{
     protected Label makeDataLabel(String text) {
         Label dataLabel = new Label(text);
         dataLabel.setMaxWidth(Double.MAX_VALUE);
-        dataLabel.alignmentProperty().set(Pos.CENTER_LEFT);
+        dataLabel.alignmentProperty().set(Pos.CENTER_RIGHT);
         dataLabel.setFont(Font.font("Consolas", 12));
         return dataLabel;
     }
@@ -252,8 +252,8 @@ public class AlgorithmController{
         //TODO: offer different export options (.txt, .csv, .pdf)
         fileChooser.getExtensionFilters().add(new ExtensionFilter("txt files", ".txt"));
         //Set default name based on the algorithm's name and the seed used for generation
-        fileChooser.setInitialFileName(String.format("%s(%f).txt", 
-            titleLabel.getText(), currentAlgorithm.getParameters().get("Seed").getValue()
+        fileChooser.setInitialFileName(String.format("%s(%d).txt", 
+            titleLabel.getText(), currentAlgorithm.getParameters().get("Semilla").getValue()
         ));
         //Show save dialog and revocer or create the selected file
         File numbersFile = fileChooser.showSaveDialog(mainVBox.getScene().getWindow());

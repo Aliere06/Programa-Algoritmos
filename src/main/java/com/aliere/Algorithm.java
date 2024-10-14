@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
@@ -31,8 +32,10 @@ public abstract class Algorithm {
     //ATTRIBUTES
     private String name; //Algorithm display name
     private String code; //Algorithm generation code
+    private int originalSeed;
+    private int trueSeed;
     private LinkedHashMap<String, Parameter<?>> parameters; //Algorithm's generation parameters
-    private ArrayList<RandomNumber> randomNumbers; //List of generated numbers
+    private LinkedHashSet<RandomNumber> randomNumbers; //List of generated numbers
     private String[] columns; //Column headers for the GUI's table
     
     //SETS
@@ -41,6 +44,12 @@ public abstract class Algorithm {
     }
     public void setCode(String code) {
         this.code = code;
+    }
+    public void setOriginalSeed(int originalSeed) {
+        this.originalSeed = originalSeed;
+    }
+    public void setTrueSeed(int trueSeed) {
+        this.trueSeed = trueSeed;
     }
     public void setColumns(String[] columns) {
         this.columns = columns;
@@ -52,11 +61,17 @@ public abstract class Algorithm {
     }    
     public String getCode() {
         return code;
+    }
+    public int getOriginalSeed() {
+        return originalSeed;
+    }
+    public int getTrueSeed() {
+        return trueSeed;
     }    
     public LinkedHashMap<String, Parameter<?>> getParameters() {
         return parameters;
     }    
-    public ArrayList<RandomNumber> getRandomNumbers() {
+    public LinkedHashSet<RandomNumber> getRandomNumbers() {
         return randomNumbers;
     }    
     public String[] getColumns() {
@@ -73,7 +88,7 @@ public abstract class Algorithm {
         for (Parameter<?> parametro : parameters) {
             this.parameters.put(parametro.getName(), parametro);
         }
-        this.randomNumbers = new ArrayList<>();
+        this.randomNumbers = new LinkedHashSet<>();
     }
 
     
@@ -110,19 +125,56 @@ public abstract class Algorithm {
      * {@link AlgorithmController#showNotification(String) showNotification()}
      * and passes the expection message to display it in the GUI.
      */
-    public void generateList() { //TODO: Generate the entire cycle if the iteration count is 0
+    public void generateList() {
         try {
             parametersAreValid(); //Verify parameter's values validity
             randomNumbers.clear(); //Clear the random number list
 
             Platform.runLater(() -> { //Queue execution of the generation of random numbers
+                
+                int iterations = (int)getParameters().get("Iteraciones").getValue();
+                if (iterations == 0) {
+                    int runningSeed = -1;
+                    if (this == CUADRADOS_MEDIOS || this == PRODUCTOS_MEDIOS || this == MULTIPLICADOR_CONSTANTE) {
+                        while (runningSeed != 0) {
+                            if (randomNumbers.add(generate())) {
+                                runningSeed = (int)getParameters().get("Semilla").getValue();
+                                //System.out.println("Running seed: " + runningSeed);
+                            } else {
+                                System.out.println("repeat value found");
+                                runningSeed = 0;
+                            }
+                        }
+                    } else {
+                        /*For congruential algorithms, step through the first 2 iterations
+                        *to determine the true seed*/
+                        originalSeed = (int)getParameters().get("Semilla").getValue();
+                        System.out.println("Original seed: " + originalSeed);
+                        randomNumbers.add(generate());
+                        
+                        trueSeed = (int)getParameters().get("Semilla").getValue();
+                        System.out.println("True seed: " + trueSeed);
+                        randomNumbers.add(generate());
 
-                int iterations = (int)getParameters().get("Iterations").getValue();
-                for (int i = 0; i < iterations; i++) {
-                    randomNumbers.add(generate()); //Generate numbers up to the iteration count
+                        runningSeed = (int)getParameters().get("Semilla").getValue();
+                        System.out.println("Running seed: " + runningSeed);
+                        while (runningSeed != trueSeed && runningSeed != originalSeed) {
+                            randomNumbers.add(generate());
+                            runningSeed = (int)getParameters().get("Semilla").getValue();
+                            //System.out.println("Running seed: " + runningSeed);
+                        }
+                    }
+
+                } else {
+                    for (int i = 0; i < iterations; i++) {
+                        randomNumbers.add(generate()); //Generate numbers up to the iteration count
+                    }
                 }
 
                 Program.getAlgorithmController().populateTable(randomNumbers); //Populate GUI table
+                for (ParameterInput<?> pInput : Program.getAlgorithmController().getParameterInputs().values()) {
+                    pInput.refreshValue();
+                }
             });
 
         } catch (Exception e) { //If generation fails send error as notification
@@ -238,4 +290,352 @@ public abstract class Algorithm {
             return ran;
         }
     };
+
+    // CUADRADOS MEDIOS
+    public static final Algorithm CUADRADOS_MEDIOS = new Algorithm(
+        "Algoritmo de Cuadrados Medios", "code", new String[]{"Xn", "Xn^2", "Xn+1", "Ri"}, 
+        Parameter.seedParameter(), 
+        Parameter.iterationsParameter(e -> Algorithm.CUADRADOS_MEDIOS.generateList())) {
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public RandomNumber generate() {
+            System.out.println("generating");
+            LinkedHashMap<String, String> components = new LinkedHashMap<>();
+
+            //Generation steps
+            int x0 = (int)getParameters().get("Semilla").getValue();
+            components.put(getColumns()[0], String.valueOf(x0));
+
+            long x0_squared = x0 * x0;
+            components.put(getColumns()[1], String.valueOf(x0_squared));
+
+            int xn = (int)((x0_squared / 100) % 10000); //TODO: add support for n>3 digit numbers, not just 4
+            components.put(getColumns()[2], String.valueOf(xn));
+
+            double ri = (double)xn / 10000;
+            components.put(getColumns()[3], String.valueOf(ri));
+
+            //Update parameter values
+            Parameter<Integer> semilla = (Parameter<Integer>) getParameters().get("Semilla");
+            semilla.setValue(xn);
+
+            //Build and return RandomNumber
+            RandomNumber ran = new RandomNumber(ri, components); // Crear un nuevo número aleatorio
+            return ran;
+        }
+        
+    };
+
+    // PRODUCTO MEDIO ALGORITHM INSTANCE
+    public static final Algorithm PRODUCTOS_MEDIOS = new Algorithm(
+        "Algoritmo de Productos Medios", "code", new String[]{"X1", "X2", "X1 * X2", "Xn+1", "Ri"},
+        //PARAMETERS
+        Parameter.seedParameter(), 
+        Parameter.iterationsParameter(e -> Algorithm.PRODUCTOS_MEDIOS.generateList()), 
+        new Parameter<Integer>("Segunda Semilla", 0){
+
+            @Override
+            public Integer validate() {
+                if (getValue() >= 0) {
+                    return getValue();
+                } else {
+                    return null;
+                }
+            }
+
+            @Override
+            public void parseString(String string) {
+                setValue(Integer.parseInt(string));
+            }
+        }
+    ) {
+        //GENERATION METHOD
+        @SuppressWarnings("unchecked")
+        @Override
+        public RandomNumber generate() {
+            LinkedHashMap<String, String> components = new LinkedHashMap<>();
+
+            //Generation steps
+            int x0 = (int)getParameters().get("Semilla").getValue();
+            components.put(getColumns()[0], String.valueOf(x0));
+
+            int x1 = (int)getParameters().get("Segunda Semilla").getValue();
+            components.put(getColumns()[1], String.valueOf(x1));
+            
+            long resultado = (long)x0 * x1;  // Multiplicar X0 y X1
+            components.put(getColumns()[2], String.valueOf(resultado));
+
+            int xn = (int)((resultado / 100) % 10000); //TODO: add support for n>3 digit numbers, not just 4
+            components.put(getColumns()[3], String.valueOf(xn));
+
+            double ri = (double)xn / 10000;
+            components.put(getColumns()[4], String.valueOf(ri));
+
+            //Update parameter values
+            Parameter<Integer> seed1 = (Parameter<Integer>) getParameters().get("Semilla");
+            seed1.setValue(x1);
+
+            Parameter<Integer> seed2 = (Parameter<Integer>) getParameters().get("Segunda Semilla");
+            seed2.setValue(xn);
+
+            //Build and return RandomNumber
+            RandomNumber ran = new RandomNumber(ri, components); // Crear un nuevo número aleatorio
+            return ran;
+        }
+    };
+
+    // MULTIPLICADOR CONSTANTE ALGORITHM INSTANCE
+    public static final Algorithm MULTIPLICADOR_CONSTANTE = new Algorithm(
+        "Multiplicador Constante", "MC", new String[]{"Xn", "Xn * a", "Xn+1", "Ri"},
+        //PARAMETERS
+        Parameter.seedParameter(),
+        Parameter.iterationsParameter(e -> Algorithm.MULTIPLICADOR_CONSTANTE.generateList()),
+        new Parameter<Long>("Multiplicador (a)", 0L){
+
+            @Override
+            public Long validate() {
+                if (getValue() > 0) {
+                    return getValue();
+                } else {
+                    return null;
+                }
+            }
+
+            @Override
+            public void parseString(String string) {
+                setValue(Long.parseLong(string));
+            }
+        }
+    ) {
+        //GENERATION METHOD
+        @SuppressWarnings("unchecked")
+        @Override
+        public RandomNumber generate() {
+            LinkedHashMap<String, String> components = new LinkedHashMap<>();
+            long a = (long)getParameters().get("Multiplicador (a)").getValue();
+            
+
+            int x0 = (int)getParameters().get("Semilla").getValue();
+            components.put(getColumns()[0], String.valueOf(x0));
+            
+            long x0a = x0 * a;
+            components.put(getColumns()[1], String.valueOf(x0a));
+
+            int xn = (int)((x0a / 100) % 10000); //TODO: add support for n>3 digit numbers, not just 4
+            components.put(getColumns()[2], String.valueOf(xn));
+
+            double ri = (double)xn / 10000;
+            components.put(getColumns()[3], String.valueOf(ri));
+
+
+            Parameter<Integer> seed = (Parameter<Integer>) getParameters().get("Semilla");
+            seed.setValue(xn);
+    
+
+            RandomNumber ran = new RandomNumber(ri, components);
+            return ran;
+        }
+    };
+
+    // LINEAR CONGRUENTIAL ALGORITHM INSTANCE
+    public static final Algorithm LINEAR = new Algorithm(
+        "Algoritmo Lineal", "code", new String[]{"Xn", "Xn * a + c", "Mod(m)", "Ri"},
+        //PARAMETERS
+        Parameter.seedParameter(), 
+        Parameter.iterationsParameter(e -> Algorithm.LINEAR.generateList()), 
+        new Parameter<Integer>("k", 0) {
+
+            @Override
+            public Integer validate() {
+                if (getValue() >= 0) {
+                    return getValue();
+                } else {
+                    return null;
+                }
+            }
+
+            @Override
+            public void parseString(String string) throws Exception {
+                setValue(Integer.parseInt(string));
+            }
+            
+        }, 
+        new Parameter<Integer>("g", 0) {
+
+            @Override
+            public Integer validate() {
+                if (getValue() >= 0) {
+                    return getValue();
+                } else {
+                    return null;
+                }
+            }
+
+            @Override
+            public void parseString(String string) throws Exception {
+                setValue(Integer.parseInt(string));
+            }
+  
+        }, 
+        new Parameter<Integer>("m", 0, 
+            e -> {
+                AlgorithmController ac = Program.getAlgorithmController();
+                int g = (int)ac.getParameterInputs().get("g").getValue();
+                ac.getParameterInputs().get("m").setInput(String.valueOf((int)Math.pow(2, g)));
+            }, FontAwesomeSolid.SYNC_ALT, true) {
+
+            @Override
+            public Integer validate() {
+                if (getValue() > 0) {
+                    return getValue();
+                } else {
+                    return null;
+                }
+            }
+
+            @Override
+            public void parseString(String string) throws Exception {
+                setValue(Integer.parseInt(string));
+            }
+            
+        }, 
+        new Parameter<Integer>("c", 0, 
+            e -> {
+                AlgorithmController ac = Program.getAlgorithmController();
+                int m = (int)ac.getParameterInputs().get("m").getValue();                
+                ac.getParameterInputs().get("c").setInput(String.valueOf(Parameter.largestRelativePrime(m)));
+            }, FontAwesomeSolid.SYNC_ALT, true) {
+
+            @Override
+            public Integer validate() {
+                if (getValue() > 0) {
+                    return getValue();
+                } else {
+                    return null;
+                }
+            }
+
+            @Override
+            public void parseString(String string) throws Exception {
+                setValue(Integer.parseInt(string));
+            }
+            
+        }, 
+        new Parameter<Integer>("a", 0, 
+            e -> {
+                AlgorithmController ac = Program.getAlgorithmController();
+                int k = (int)ac.getParameterInputs().get("k").getValue();                
+                ac.getParameterInputs().get("a").setInput(String.valueOf(1 + (4 * k)));
+            }, FontAwesomeSolid.SYNC_ALT, true) {
+
+                @Override
+                public Integer validate() {
+                    if (getValue() > 0) {
+                        return getValue();
+                    } else {
+                        return null;
+                    }
+                }
+
+                @Override
+                public void parseString(String string) throws Exception {
+                    setValue(Integer.parseInt(string));
+                }
+                
+            }
+    ) {
+        //GENERATION METHOD
+        @SuppressWarnings("unchecked")
+        @Override
+        public RandomNumber generate() {
+            LinkedHashMap<String, String> components = new LinkedHashMap<>();
+
+            //Parameter values
+            int a = (int)getParameters().get("a").getValue();
+            int c = (int)getParameters().get("c").getValue();
+            int m = (int)getParameters().get("m").getValue();
+
+            //Generation steps
+            int x0 = (int)getParameters().get("Semilla").getValue();
+            components.put(getColumns()[0], String.valueOf(x0));
+
+            long xac = ((long)x0 * a) + c;
+            components.put(getColumns()[1], String.valueOf(xac));
+
+            int modM = (int)xac % m;
+            components.put(getColumns()[2], String.valueOf(modM));
+
+            double ri = (double)modM / (m - 1);
+            components.put(getColumns()[3], String.valueOf(ri));
+
+            //Update parameter values
+            Parameter<Integer> seed = (Parameter<Integer>)getParameters().get("Semilla");
+            seed.setValue(modM);
+
+            //Build and return RandomNumber
+            RandomNumber ran = new RandomNumber(x0, components);
+            return ran;
+        }
+    };
+    
+    // ADDITIONAL CONGRUENTIAL ADDITIVE ALGORITHM INSTANCE
+    public static final Algorithm CONGRUENTIAL_ADDITIVE = new Algorithm("Congruential Additive Generator", "code", 
+    new String[]{"Iteration", "Xi", "Xi+1"},
+    //PARAMETERS
+    new Parameter<Long>("Seed", 1L){
+
+        @Override
+        public Long validate() {
+            return getValue();
+        }
+
+        @Override
+        public void parseString(String string) {
+            setValue(Long.parseLong(string));
+        }
+    },
+    new Parameter<Long>("Increment", 1L){
+
+        @Override
+        public Long validate() {
+            return getValue();
+        }
+
+        @Override
+        public void parseString(String string) {
+            setValue(Long.parseLong(string));
+        }
+    },
+    new Parameter<Integer>("Iterations", 10, e -> Algorithm.CONGRUENTIAL_ADDITIVE.generateList(), FontAwesomeSolid.PLAY, false){
+
+        @Override
+        public Integer validate() {
+            return getValue();
+        }
+
+        @Override
+        public void parseString(String string) {
+            setValue(Integer.parseInt(string));
+        }
+    }) {
+        //GENERATION METHOD
+        @Override
+        public RandomNumber generate() {
+            LinkedHashMap<String, String> components = new LinkedHashMap<>();
+            long seed = (long) getParameters().get("Seed").getValue();
+            long increment = (long) getParameters().get("Increment").getValue();
+            components.put(getColumns()[0], String.valueOf(seed));
+            long next = seed + increment; // Basic congruential additive generation
+
+            for (int i = 0; i < (int) getParameters().get("Iterations").getValue(); i++) {
+                components.put(getColumns()[1], String.valueOf(next));
+                seed = next;
+                next = seed + increment; // Update to next
+            }
+
+            RandomNumber ran = new RandomNumber(seed, components);
+            return ran;
+        }
+    };   
 }
