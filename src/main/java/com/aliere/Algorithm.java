@@ -12,8 +12,7 @@ import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import javafx.application.Platform;
 
 //ALGORITHM CLASS
-/** 
- * <p> Class that represents the algorithm model.
+/**<p> Class that represents the algorithm model.
  * 
  * <p> All the algorithms present in the program are defined as instances
  * of this class, the attributes of these instances are used by the
@@ -87,7 +86,7 @@ public abstract class Algorithm {
         for (Parameter<?> p : parameters.values()) { //Loop through the parameter map
             if (!p.isValid()) { //Check if parameter value is valid
                 throw new InvalidParameterException(
-                    String.format("Value for parameter \"%s\" is invalid", p.getName())
+                    String.format("El valor del parámetro \"%s\" no es válido.", p.getName())
                     );
                 }
             }
@@ -123,11 +122,11 @@ public abstract class Algorithm {
                     randomNumbers.add(generate()); //Generate numbers up to the iteration count
                 }
 
-                Main.getAlgorithmController().populateTable(randomNumbers); //Populate GUI table
+                Program.getAlgorithmController().populateTable(randomNumbers); //Populate GUI table
             });
 
         } catch (Exception e) { //If generation fails send error as notification
-            Main.getAlgorithmController().showNotification(e.getMessage());
+            Program.getAlgorithmController().showNotification(e.getMessage());
         }
 
         //for (RandomNumber r : numbers) { System.out.println(r); }
@@ -208,9 +207,9 @@ public abstract class Algorithm {
     }, 
     new Parameter<String>("Generated", "", 
         e -> {
-            double seed = (double) Main.getAlgorithmController().getParameterInputs().get("Seed").getValue();
-            int iterations = (int) Main.getAlgorithmController().getParameterInputs().get("Iterations").getValue();
-            Main.getAlgorithmController().getParameterInputs().get("Generated").setInput(String.valueOf(seed * iterations));
+            double seed = (double) Program.getAlgorithmController().getParameterInputs().get("Seed").getValue();
+            int iterations = (int) Program.getAlgorithmController().getParameterInputs().get("Iterations").getValue();
+            Program.getAlgorithmController().getParameterInputs().get("Generated").setInput(String.valueOf(seed * iterations));
         }, FontAwesomeSolid.SYNC_ALT, true){
 
         @Override

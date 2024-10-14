@@ -60,7 +60,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>com.aliere.Main</mainClass>
+                    <mainClass>com.aliere.Window</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -73,13 +73,24 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.gluonhq</groupId>
-                <artifactId> gluonfx-maven-plugin</artifactId>
-                <version>1.0.24</version>
-                <configuration>
-                    <mainClass>com.aliere.Main</mainClass>
-                    <graalvmHome>C:\Program Files (x86)\graalvm-jdk-21.0.4+8.1</graalvmHome>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                    <goal>shade</goal>
+                    </goals>
+                    <configuration>
+                    <transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                        <mainClass>com.aliere.Main</mainClass>
+                        </transformer>
+                    </transformers>
+                    </configuration>
+                </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -30,8 +30,8 @@ public class MenuController implements Initializable{
         Main.getAlgorithmController().addParameterInput(parameterInputs.values().toArray(new ParameterInput[0]));
         */
         Platform.runLater(() -> {
-            Main.getAlgorithmController().loadAlgorithm(Algorithm.SAMPLE);
+            Program.getAlgorithmController().loadAlgorithm(Algorithm.SAMPLE);
         });
-        Main.setScreen(Main.Screen.ALGORITHM);
+        Program.setScreen(Program.Screen.ALGORITHM);
     }
 }

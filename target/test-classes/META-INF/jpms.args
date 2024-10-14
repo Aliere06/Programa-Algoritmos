@@ -1,0 +1,4 @@
+--patch-module
+com.aliere=_
+--add-reads
+com.aliere=ALL-UNNAMED
