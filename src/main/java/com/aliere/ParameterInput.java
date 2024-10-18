@@ -14,9 +14,11 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -87,6 +89,12 @@ public class ParameterInput<T> extends VBox implements Initializable{
             parameter.validate();
             if (!parameter.isValid()) {
                 textField.setStyle("-fx-control-inner-background: mistyrose");
+                /* TODO: Properly implement error tooltips
+                Tooltip t = new Tooltip("Valor Incorrecto");
+                textField.setTooltip(t);
+                Point2D p = textField.localToScreen(0, textField.getHeight());
+                textField.getTooltip().show(textField.getScene().getWindow(), p.getX(), p.getY());
+                 */
             } else {
                 textField.setStyle("-fx-control-inner-background: white");
             }

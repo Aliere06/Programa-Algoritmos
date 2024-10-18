@@ -41,9 +41,9 @@ public class MenuController implements Initializable{
         buttonMap.put("Cuadrados Medios", Algorithm.CUADRADOS_MEDIOS);
         buttonMap.put("Productos Medios", Algorithm.PRODUCTOS_MEDIOS);
         buttonMap.put("Multiplicador Constante", Algorithm.MULTIPLICADOR_CONSTANTE);
-        buttonMap.put("Lineal", Algorithm.LINEAR);
+        buttonMap.put("Lineal", Algorithm.LINEAL);
         buttonMap.put("Congruencial Multiplicativo", null);
-        buttonMap.put("Congruencial Aditivo", Algorithm.CONGRUENTIAL_ADDITIVE);
+        buttonMap.put("Congruencial Aditivo", Algorithm.CONGRUENCIAL_ADITIVO);
         buttonMap.put("Congruencial no Lineal", Algorithm.BLUM_BLUM_SHUB);
     }
 }

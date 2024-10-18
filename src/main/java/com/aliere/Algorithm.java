@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.regex.*;
 
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 
@@ -142,25 +144,25 @@ public abstract class Algorithm {
                                 runningSeed = (int)getParameters().get("Semilla").getValue();
                                 //System.out.println("Running seed: " + runningSeed);
                             } else {
-                                System.out.println("repeat value found");
+                                //System.out.println("repeat value found");
                                 runningSeed = 0;
                             }
                         }
-                        System.out.println("out of the loop");
-                        System.out.println(randomNumbers.size());
+                        //System.out.println("out of the loop");
+                        //System.out.println(randomNumbers.size());
                     } else {
                         /*For congruential algorithms, step through the first 2 iterations
                         *to determine the true seed*/
                         originalSeed = (int)getParameters().get("Semilla").getValue();
-                        System.out.println("Original seed: " + originalSeed);
+                        //System.out.println("Original seed: " + originalSeed);
                         randomNumbers.add(generate());
                         
                         trueSeed = (int)getParameters().get("Semilla").getValue();
-                        System.out.println("True seed: " + trueSeed);
+                        //System.out.println("True seed: " + trueSeed);
                         randomNumbers.add(generate());
 
                         runningSeed = (int)getParameters().get("Semilla").getValue();
-                        System.out.println("Running seed: " + runningSeed);
+                        //System.out.println("Running seed: " + runningSeed);
                         while (runningSeed != trueSeed && runningSeed != originalSeed) {
                             randomNumbers.add(generate());
                             runningSeed = (int)getParameters().get("Semilla").getValue();
@@ -171,15 +173,15 @@ public abstract class Algorithm {
                 } else {
                     for (int i = 0; i < iterations; i++) {
                         if (!randomNumbers.add(generate())) {
-                            System.out.println("valor repetido");
+                            //System.out.println("valor repetido");
                         }
                         ; //Generate numbers up to the iteration count
                     }
                 }
 
-                System.out.println("building table");
+                //System.out.println("building table");
                 Program.getAlgorithmController().populateTable(randomNumbers); //Populate GUI table
-                System.out.println("Table built");
+                //System.out.println("Table built");
                 for (ParameterInput<?> pInput : Program.getAlgorithmController().getParameterInputs().values()) {
                     pInput.refreshValue();
                 }
@@ -344,7 +346,8 @@ public abstract class Algorithm {
 
             @Override
             public Integer validate() {
-                if (getValue() >= 0) {
+                Integer seed = (Integer)Algorithm.PRODUCTOS_MEDIOS.parameters.get("Semilla").getValue();
+                if (getValue().toString().length() == seed.toString().length()) {
                     return getValue();
                 } else {
                     return null;
@@ -394,7 +397,7 @@ public abstract class Algorithm {
 
     // MULTIPLICADOR CONSTANTE ALGORITHM INSTANCE
     public static final Algorithm MULTIPLICADOR_CONSTANTE = new Algorithm(
-        "Multiplicador Constante", "MC", new String[]{"Xn", "Xn * a", "Xn+1", "Ri"},
+        "Multiplicador Constante", "code", new String[]{"Xn", "Xn * a", "Xn+1", "Ri"},
         //PARAMETERS
         Parameter.seedParameter(),
         Parameter.iterationsParameter(e -> Algorithm.MULTIPLICADOR_CONSTANTE.generateList()),
@@ -446,11 +449,11 @@ public abstract class Algorithm {
     };
 
     // LINEAR CONGRUENTIAL ALGORITHM INSTANCE
-    public static final Algorithm LINEAR = new Algorithm(
+    public static final Algorithm LINEAL = new Algorithm(
         "Algoritmo Lineal", "code", new String[]{"Xn", "Xn * a + c", "Mod(m)", "Ri"},
         //PARAMETERS
         Parameter.seedParameter(), 
-        Parameter.iterationsParameter(e -> Algorithm.LINEAR.generateList()), 
+        Parameter.iterationsParameter(e -> Algorithm.LINEAL.generateList()), 
         new Parameter<Integer>("k", 0) {
 
             @Override
@@ -587,21 +590,48 @@ public abstract class Algorithm {
     };
     
     // CONGRUENTIAL ADDITIVE ALGORITHM INSTANCE
-    public static final Algorithm CONGRUENTIAL_ADDITIVE = new Algorithm("Congruential Additive Generator", "code", 
-    new String[]{"Iteration", "Xi", "Xi+1"},
+    public static final Algorithm CONGRUENCIAL_ADITIVO = new Algorithm("Congruential Additive Generator", "code", 
+    new String[]{"Xi-1", "Xi-n", "Sum", "Mod(m)", "Ri"},
     //PARAMETERS
-    new Parameter<Long>("Seed", 1L){
+    Parameter.seedParameter(),
+    new Parameter<String>("Additional seeds", ""){
+
+        Pattern invalidationPattern = Pattern.compile("[^-,\\d\\s]+");
+        Pattern numPattern = Pattern.compile("\\d+");
 
         @Override
-        public Long validate() {
-            return getValue();
+        public String validate() {
+            int seed = (int)Algorithm.CONGRUENCIAL_ADITIVO.parameters.get("Semilla").getValue();
+            
+            Matcher invalidMatcher = invalidationPattern.matcher(getValue());
+            if (invalidMatcher.find()) {
+                return null;
+            }
+
+            Matcher numMatcher = numPattern.matcher(getValue());
+            int d = String.valueOf(seed).length();
+            if (numMatcher.results().allMatch(m -> m.group().length() == d)) {
+                /*
+                ArrayList<String> matches = new ArrayList<>();
+                numMatcher.results().forEach(m -> matches.add(m.toString()));
+                value = "";
+                value.concat(matches.removeFirst());
+                for (String s : matches) {
+                    value.concat(", " + s);
+                }
+                 */
+                return getValue();
+            } else {
+                return null;
+            }
         }
 
         @Override
-        public void parseString(String string) {
-            setValue(Long.parseLong(string));
+        public void parseString(String string) throws Exception {
+            setValue(string);
         }
-    },
+
+    }, 
     new Parameter<Long>("Increment", 1L){
 
         @Override
@@ -614,7 +644,7 @@ public abstract class Algorithm {
             setValue(Long.parseLong(string));
         }
     },
-    new Parameter<Integer>("Iterations", 10, e -> Algorithm.CONGRUENTIAL_ADDITIVE.generateList(), FontAwesomeSolid.PLAY, false){
+    new Parameter<Integer>("Iterations", 10, e -> Algorithm.CONGRUENCIAL_ADITIVO.generateList(), FontAwesomeSolid.PLAY, false){
 
         @Override
         public Integer validate() {
@@ -626,6 +656,7 @@ public abstract class Algorithm {
             setValue(Integer.parseInt(string));
         }
     }) {
+
         //GENERATION METHOD
         @Override
         public RandomNumber generate() {
@@ -694,7 +725,9 @@ public abstract class Algorithm {
 
             @Override
             public Long validate() {
-                if (getValue() > 0) {
+                int p = (int)Algorithm.BLUM_BLUM_SHUB.parameters.get("p").getValue();
+                int q = (int)Algorithm.BLUM_BLUM_SHUB.parameters.get("q").getValue();
+                if (getValue() == p * q) {
                     return getValue();
                 } else {
                     return null;
@@ -739,6 +772,5 @@ public abstract class Algorithm {
             RandomNumber ran = new RandomNumber(ri, components);
             return ran;
         }
-        
     };
 }

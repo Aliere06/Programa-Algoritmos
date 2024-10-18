@@ -167,10 +167,8 @@ public class AlgorithmController{
         System.out.println("First data row created");
 
         //Create and add the rest of the rows from the RandomNumber list
-        RandomNumber[] dataArray = data.toArray(new RandomNumber[0]);
-        System.out.println(dataArray.length);
         int i = 1;
-        for (RandomNumber r : dataArray) {
+        for (RandomNumber r : data) {
             gridTableData.getRowConstraints().add(new RowConstraints(
                 -1, -1, -1, Priority.NEVER, VPos.BASELINE, false
             ));
@@ -183,7 +181,7 @@ public class AlgorithmController{
             //System.out.println(dataArray.length);
             i++;
         }
-        System.out.println("finished building from set");
+        //System.out.println("finished building from set");
     }
 
     //Clean GridPane

@@ -58,7 +58,7 @@ public abstract class Parameter<T> {
         this.name = name;
         this.value = value;
         type = value.getClass();
-        validateInternal();
+        //validateInternal();
         this.buttonAction = null;
         this.isGenerated = false;
     }
