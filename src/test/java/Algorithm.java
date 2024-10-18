@@ -386,198 +386,68 @@ public abstract class Algorithm {
     };
 
     // MULTIPLICADOR CONSTANTE ALGORITHM INSTANCE
-    public static final Algorithm MULTIPLICADOR_CONSTANTE = new Algorithm(
-        "Multiplicador Constante", "MC", new String[]{"Xn", "Xn * a", "Xn+1", "Ri"},
+    public static final Algorithm CONGRUENCIAL_MULTIPLICATIVO = new Algorithm(
+        "Algoritmo Congruencial Multiplicativo", "code", new String[]{"Xn", "Xn * a", "Mod(m)", "Ri"},
         //PARAMETERS
         Parameter.seedParameter(),
-        Parameter.iterationsParameter(e -> Algorithm.MULTIPLICADOR_CONSTANTE.generateList()),
-        new Parameter<Long>("Multiplicador (a)", 0L){
-
+        Parameter.iterationsParameter(e -> Algorithm.CONGRUENCIAL_MULTIPLICATIVO.generateList()),
+        new Parameter<Integer>("a", 1) {
             @Override
-            public Long validate() {
-                if (getValue() > 0) {
-                    return getValue();
-                } else {
-                    return null;
-                }
+            public Integer validate() {
+                return getValue() > 0 ? getValue() : null;
             }
-
-            @Override
-            public void parseString(String string) {
-                setValue(Long.parseLong(string));
-            }
-        }
-    ) {
-        //GENERATION METHOD
-        @SuppressWarnings("unchecked")
-        @Override
-        public RandomNumber generate() {
-            LinkedHashMap<String, String> components = new LinkedHashMap<>();
-            long a = (long)getParameters().get("Multiplicador (a)").getValue();
-            
-
-            int x0 = (int)getParameters().get("Semilla").getValue();
-            components.put(getColumns()[0], String.valueOf(x0));
-            
-            long x0a = x0 * a;
-            components.put(getColumns()[1], String.valueOf(x0a));
-
-            int xn = (int)((x0a / 100) % 10000); //TODO: add support for n>3 digit numbers, not just 4
-            components.put(getColumns()[2], String.valueOf(xn));
-
-            double ri = (double)xn / 10000;
-            components.put(getColumns()[3], String.valueOf(ri));
-
-
-            Parameter<Integer> seed = (Parameter<Integer>) getParameters().get("Semilla");
-            seed.setValue(xn);
     
-
-            RandomNumber ran = new RandomNumber(ri, components);
-            return ran;
+            @Override
+            public void parseString(String string) throws Exception {
+                setValue(Integer.parseInt(string));
+            }
+        },
+        new Parameter<Integer>("m", 0) {
+            @Override
+            public Integer validate() {
+                return getValue() > 0 ? getValue() : null;
+            }
+    
+            @Override
+            public void parseString(String string) throws Exception {
+                setValue(Integer.parseInt(string));
+            }
         }
-    };
-
-    // LINEAR CONGRUENTIAL ALGORITHM INSTANCE
-    public static final Algorithm LINEAR = new Algorithm(
-        "Algoritmo Lineal", "code", new String[]{"Xn", "Xn * a + c", "Mod(m)", "Ri"},
-        //PARAMETERS
-        Parameter.seedParameter(), 
-        Parameter.iterationsParameter(e -> Algorithm.LINEAR.generateList()), 
-        new Parameter<Integer>("k", 0) {
-
-            @Override
-            public Integer validate() {
-                if (getValue() >= 0) {
-                    return getValue();
-                } else {
-                    return null;
-                }
-            }
-
-            @Override
-            public void parseString(String string) throws Exception {
-                setValue(Integer.parseInt(string));
-            }
-            
-        }, 
-        new Parameter<Integer>("g", 0) {
-
-            @Override
-            public Integer validate() {
-                if (getValue() >= 0) {
-                    return getValue();
-                } else {
-                    return null;
-                }
-            }
-
-            @Override
-            public void parseString(String string) throws Exception {
-                setValue(Integer.parseInt(string));
-            }
-  
-        }, 
-        new Parameter<Integer>("m", 0, 
-            e -> {
-                AlgorithmController ac = Program.getAlgorithmController();
-                int g = (int)ac.getParameterInputs().get("g").getValue();
-                ac.getParameterInputs().get("m").setInput(String.valueOf((int)Math.pow(2, g)));
-            }, FontAwesomeSolid.SYNC_ALT, true) {
-
-            @Override
-            public Integer validate() {
-                if (getValue() > 0) {
-                    return getValue();
-                } else {
-                    return null;
-                }
-            }
-
-            @Override
-            public void parseString(String string) throws Exception {
-                setValue(Integer.parseInt(string));
-            }
-            
-        }, 
-        new Parameter<Integer>("c", 0, 
-            e -> {
-                AlgorithmController ac = Program.getAlgorithmController();
-                int m = (int)ac.getParameterInputs().get("m").getValue();                
-                ac.getParameterInputs().get("c").setInput(String.valueOf(Parameter.largestRelativePrime(m)));
-            }, FontAwesomeSolid.SYNC_ALT, true) {
-
-            @Override
-            public Integer validate() {
-                if (getValue() > 0) {
-                    return getValue();
-                } else {
-                    return null;
-                }
-            }
-
-            @Override
-            public void parseString(String string) throws Exception {
-                setValue(Integer.parseInt(string));
-            }
-            
-        }, 
-        new Parameter<Integer>("a", 0, 
-            e -> {
-                AlgorithmController ac = Program.getAlgorithmController();
-                int k = (int)ac.getParameterInputs().get("k").getValue();                
-                ac.getParameterInputs().get("a").setInput(String.valueOf(1 + (4 * k)));
-            }, FontAwesomeSolid.SYNC_ALT, true) {
-
-                @Override
-                public Integer validate() {
-                    if (getValue() > 0) {
-                        return getValue();
-                    } else {
-                        return null;
-                    }
-                }
-
-                @Override
-                public void parseString(String string) throws Exception {
-                    setValue(Integer.parseInt(string));
-                }
-                
-            }
     ) {
         //GENERATION METHOD
         @SuppressWarnings("unchecked")
         @Override
         public RandomNumber generate() {
             LinkedHashMap<String, String> components = new LinkedHashMap<>();
-
-            //Parameter values
-            int a = (int)getParameters().get("a").getValue();
-            int c = (int)getParameters().get("c").getValue();
-            int m = (int)getParameters().get("m").getValue();
-
-            //Generation steps
-            int x0 = (int)getParameters().get("Semilla").getValue();
-            components.put(getColumns()[0], String.valueOf(x0));
-
-            long xac = ((long)x0 * a) + c;
-            components.put(getColumns()[1], String.valueOf(xac));
-
-            int modM = (int)xac % m;
-            components.put(getColumns()[2], String.valueOf(modM));
-
-            double ri = (double)modM / (m - 1);
+    
+            // Parameter values
+            int a = (int) getParameters().get("a").getValue();
+            int m = (int) getParameters().get("m").getValue();
+    
+            // Get the current seed value
+            int xn = (int) getParameters().get("Semilla").getValue();
+            components.put(getColumns()[0], String.valueOf(xn));
+    
+            // Calculate the next value
+            long xn_times_a = (long) xn * a;
+            components.put(getColumns()[1], String.valueOf(xn_times_a));
+            
+            int xn_plus_a = (int) (xn_times_a % m);
+            components.put(getColumns()[2], String.valueOf(xn_plus_a));
+    
+            double ri = (double) xn_plus_a / (m - 1);
             components.put(getColumns()[3], String.valueOf(ri));
-
-            //Update parameter values
-            Parameter<Integer> seed = (Parameter<Integer>)getParameters().get("Semilla");
-            seed.setValue(modM);
-
-            //Build and return RandomNumber
-            RandomNumber ran = new RandomNumber(x0, components);
+    
+            // Update seed for next iteration
+            Parameter<Integer> seedParam = (Parameter<Integer>) getParameters().get("Semilla");
+            seedParam.setValue(xn_plus_a);
+    
+            // Build and return RandomNumber
+            RandomNumber ran = new RandomNumber(xn, components);
             return ran;
         }
     };
+    
     
         // ADDITIONAL CONGRUENTIAL ADDITIVE ALGORITHM INSTANCE
         public static final Algorithm CONGRUENCIAL_ADITIVO = new Algorithm(
